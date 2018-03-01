@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.EntityTypeMapper">
+    <resultMap id="entityType" type="app.wiper.domain.type.EntityType">
+        <result property="entityTypeId" column="entity_type_id" jdbcType="INTEGER" />
+        <result property="name" column="name" jdbcType="VARCHAR" />
+        <result property="description" column="description" jdbcType="VARCHAR" />
+        <result property="orderId" column="order_id" jdbcType="INTEGER" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+    </resultMap>
+    <select id="getAllEntityTypes" resultMap="entityType">
+        select * from entity_type
+    </select>
+    <select id="getEntityTypeById" resultMap="entityType">
+        select * from entity_type where entity_type_id = #{entityTypeId}
+    </select>
+ 
+</mapper>
