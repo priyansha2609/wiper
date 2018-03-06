@@ -13,11 +13,11 @@
         <result property="isActive" column="is_active" jdbcType="BIT" />
     		<association property="vehicleType" column="vehicle_type_id"
             javaType="app.wiper.domain.type.VehicleType" select="app.wiper.mapper.interfaces.VehicleTypeMapper.getVehicleTypeById" />
-       <!-- <association property="vehicleAddress" column="vehicle_id"
-            javaType="app.wiper.domain.core.VehicleAddress" select="app.wiper.mapper.interfaces.VehicleAddressMapper.getVehicleAddressByVehicleId" />
+       <association property="vehicleAddress" column="vehicle_id"
+            javaType="app.wiper.domain.core.VehicleAddress" select="app.wiper.mapper.interfaces.VehicleAddressMapper.getAddressForVehicle" />
         <collection property="servicesDetails" column="vehicle_id"
-            ofType="app.wiper.domain.core.serviceDetails" select="app.wiper.mapper.interfaces.ServiceDetailsMapper.getServiceDetailsForTarget" />
-   --> </resultMap>
+            ofType="app.wiper.domain.core.serviceDetails" select="app.wiper.mapper.interfaces.ServiceDetailsMapper.getServiceDetailsForVehicle" />
+    </resultMap>
     
     <select id="getAllVehiclesForCustomer" resultMap="vehicle">
         select * from vehicle where customer_id = #{customerId}
