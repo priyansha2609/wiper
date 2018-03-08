@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.PaymentMapper">
+    <resultMap id="payment" type="app.wiper.domain.core.Payment">
+        <result property="paymentId" column="payment_id" jdbcType="INTEGER" />
+        <result property="customerId" column="customer_id" jdbcType="INTEGER" />
+        <result property="dateOfPayment" column="date_of_payment" jdbcType="TIMESTAMP" />
+        <result property="amountOfPayment" column="amount_of_payment" jdbcType="INTEGER" />
+        <result property="basicCharge" column="basic_charge" jdbcType="INTEGER" />
+        <result property="taxPercent" column="tax_percent" jdbcType="FLOAT" />
+        <result property="modeOfPayment" column="mode_of_payment" jdbcType="INTEGER" />
+    	</resultMap>
+    
+    <select id="getPaymentById" resultMap="payment">
+        select * from payment where payment_id = #{paymentId}
+    </select>
+    
+</mapper>

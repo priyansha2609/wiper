@@ -14,7 +14,7 @@ public class ServiceDetails {
 	Date subscriptionStartDate;
 	Date subscriptionEndDate;
 	Float amountPaid;
-	Integer bufferDaysAvailable;
+	Integer bufferDaysAvailed;
 	Payment payment;
 	Boolean isActive;
 }

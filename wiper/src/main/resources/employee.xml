@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.EmployeeMapper">
+
+    <resultMap id="employee" type="app.wiper.domain.core.Employee">
+        <result property="employeeId" column="emp_id" jdbcType="INTEGER" />
+        <result property="name" column="name" jdbcType="VARCHAR" />
+        <result property="aadharNumber" column="aadhar_number" jdbcType="VARCHAR" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+    		<association property="credentials" column="{entity_type_id=entity_type_id,entity_id=emp_id}"
+            javaType="app.wiper.domain.core.Credentials" select="app.wiper.mapper.interfaces.CredentialsMapper.getCredentialsForEntityIdAndEntityTypeId" />
+        <association property="entityType" column="entity_type_id"
+            javaType="app.wiper.domain.type.EntityType" select="app.wiper.mapper.interfaces.EntityTypeMapper.getEntityTypeById" />
+        <association property="correspondenceAddress" column="emp_id"
+            javaType="app.wiper.domain.core.CorrespondenceAddress" select="app.wiper.mapper.interfaces.AddressMapper.getCorrespondenceAddressByEmployeeId" />
+        <collection property="locations" column="emp_id"
+            ofType="app.wiper.domain.core.Location" select="getLocationsForEmployee" />
+    </resultMap>
+        
+   <select id="getLocationsForEmployee" resultMap="app.wiper.mapper.interfaces.AddressMapper.location">
+   		select * from employee_location where emp_id = #{emp_id} 
+   </select>
+           
+   <select id="getEmployeeById" resultMap="employee">
+   		select * from employee where emp_id = #{emp_id} 
+   </select>
+      
+</mapper>

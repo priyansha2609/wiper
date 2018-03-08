@@ -14,7 +14,7 @@
     		<association property="vehicleType" column="vehicle_type_id"
             javaType="app.wiper.domain.type.VehicleType" select="app.wiper.mapper.interfaces.VehicleTypeMapper.getVehicleTypeById" />
        <association property="vehicleAddress" column="vehicle_id"
-            javaType="app.wiper.domain.core.VehicleAddress" select="app.wiper.mapper.interfaces.VehicleAddressMapper.getAddressForVehicle" />
+            javaType="app.wiper.domain.core.VehicleAddress" select="app.wiper.mapper.interfaces.AddressMapper.getAddressForVehicle" />
         <collection property="servicesDetails" column="vehicle_id"
             ofType="app.wiper.domain.core.serviceDetails" select="app.wiper.mapper.interfaces.ServiceDetailsMapper.getServiceDetailsForVehicle" />
     </resultMap>

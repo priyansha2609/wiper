@@ -5,15 +5,15 @@
 
 <mapper namespace="app.wiper.mapper.interfaces.ServiceDetailsMapper">
     <resultMap id="serviceDetails" type="app.wiper.domain.core.ServiceDetails">
-        <result property="serviceDetailId" column="vehicle_id" jdbcType="INTEGER" />
-        <result property="service" column="vehicle_number" jdbcType="VARCHAR" />
-        <result property="subscriptionStartDate" column="comments" jdbcType="VARCHAR" />
-        <result property="subscriptionEndDate" column="comments" jdbcType="VARCHAR" />
+        <result property="serviceDetailId" column="service_detail_id" jdbcType="INTEGER" />
+        <!--  <result property="service" column="vehicle_number" jdbcType="VARCHAR" />-->
+        <result property="subscriptionStartDate" column="subscription_start_date" jdbcType="TIMESTAMP" />
+        <result property="subscriptionEndDate" column="subscription_end_date" jdbcType="TIMESTAMP" />
         <result property="amountPaid" column="amount_paid" jdbcType="FLOAT" />
         <result property="isActive" column="is_active" jdbcType="BIT" />
-        <result property="bufferDaysAvailable" column="buffer_days_available" jdbcType="INTEGER" />
-    		<association property="payment" column="paymment"
-            javaType="app.wiper.domain.core.Payment" select="app.wiper.mapper.interfaces.PaymentMapper.getPaymentForVehicle" />
+        <result property="bufferDaysAvailed" column="buffer_days_availed" jdbcType="INTEGER" />
+    		<association property="payment" column="payment_id"
+            javaType="app.wiper.domain.core.Payment" select="app.wiper.mapper.interfaces.PaymentMapper.getPaymentById" />
       </resultMap>
     
     <select id="getServiceDetailsForVehicle" resultMap="serviceDetails">

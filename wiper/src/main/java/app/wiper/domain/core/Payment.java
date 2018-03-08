@@ -1,5 +1,7 @@
 package app.wiper.domain.core;
 
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,5 +10,10 @@ import lombok.Setter;
 public class Payment {
 	
 	Integer paymentId;
-
+	Integer customerId;
+	Date dateOfPayment;
+	Integer amountOfPayment;
+	Integer basicCharge;
+	Float taxPercent;
+	Integer modeOfPayment;
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.AddressMapper">
+    <resultMap id="vehicleAddress" type="app.wiper.domain.core.VehicleAddress">
+        <result property="parkingLotNo" column="lot_num" jdbcType="VARCHAR" />
+        <result property="floor" column="floor" jdbcType="VARCHAR" />
+        <result property="building" column="building" jdbcType="VARCHAR" />
+        <result property="pin" column="pin" jdbcType="INTEGER" />
+        <association property="area" column="area_id"
+            javaType="app.wiper.domain.type.Area" select="getAreaById" />
+        <association property="city" column="city_id"
+            javaType="app.wiper.domain.type.City" select="getCityById" />   
+    </resultMap>    
+    
+    <resultMap id="area" type="app.wiper.domain.type.Area">
+         <result property="areaId" column="area_id" jdbcType="INTEGER" />
+        <result property="name" column="name" jdbcType="VARCHAR" />
+        <result property="description" column="description" jdbcType="VARCHAR" />
+        <result property="orderId" column="order_id" jdbcType="INTEGER" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+    </resultMap>
+    
+    <resultMap id="city" type="app.wiper.domain.type.City">
+         <result property="cityId" column="city_id" jdbcType="INTEGER" />
+        <result property="name" column="name" jdbcType="VARCHAR" />
+        <result property="description" column="description" jdbcType="VARCHAR" />
+        <result property="orderId" column="order_id" jdbcType="INTEGER" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+    </resultMap>
+
+    <resultMap id="location" type="app.wiper.domain.core.Location">
+     	 <result property="locationId" column="location_id" jdbcType="INTEGER" />
+         <association property="area" column="location_id"
+            javaType="app.wiper.domain.type.Area" select="getAreaByLocationId" />
+        <association property="city" column="location_id"
+            javaType="app.wiper.domain.type.City" select="getCityByLocationId" />   
+    </resultMap>
+    
+       
+    <select id="getCityByLocationId" resultMap="city">
+        select * from city where city_id = (select city_id from location where location_id = #{location_id})
+    </select>
+    
+    
+    <select id="getAreaByLocationId" resultMap="area">
+        select * from area where area_id = (select area_id from location where location_id = #{location_id})
+    </select>
+
+    <resultMap id="correspondenceAddress" type="app.wiper.domain.core.CorrespondenceAddress">
+        <result property="flatNo" column="flat_no" jdbcType="VARCHAR" />
+        <result property="building" column="building" jdbcType="VARCHAR" />
+        <result property="pin" column="pin" jdbcType="INTEGER" />
+        <association property="area" column="area_id"
+            javaType="app.wiper.domain.type.Area" select="getAreaById" />
+        <association property="city" column="city_id"
+            javaType="app.wiper.domain.type.City" select="getCityById" />   
+    </resultMap>
+    
+    <select id="getCityById" resultMap="city">
+        select * from city where city_id = #{cityId}
+    </select>
+    
+    <select id="getAddressForVehicle" resultMap="vehicleAddress">
+        select * from vehicle_add where vehicle_id = #{vehicleId}
+    </select>
+    
+    <select id="getAreaById" resultMap="area">
+        select * from area where area_id = #{areaId}
+    </select>
+    
+     <select id="getCorrespondenceAddressByCustomerId" resultMap="correspondenceAddress">
+        select * from customer_corr_add where customer_id = #{customerId}
+    </select>
+    
+    <select id="getCorrespondenceAddressByEmployeeId" resultMap="correspondenceAddress">
+        select * from emp_corr_add where emp_id = #{employeeId}
+    </select>
+   
+    
+    
+</mapper>

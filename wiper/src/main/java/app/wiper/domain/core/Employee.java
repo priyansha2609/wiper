@@ -8,15 +8,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Customer{
-	Integer customerId;
+public class Employee{
+	
+	Integer employeeId;
 	String name;
 	Credentials credentials;
-	EntityType entityType;
 	String aadharNumber;
+	EntityType entityType;
 	CorrespondenceAddress correspondenceAddress;
-	List<Vehicle> vehicles;
+	List<Location> locations;
 	Boolean isActive;
-	
-	
 }
