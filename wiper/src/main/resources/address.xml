@@ -106,5 +106,34 @@
 		area_id = IF(#{address.area} IS NOT NULL, #{address.area.areaId}, area_id),
 		city_id = IF(#{address.city} IS NOT NULL, #{address.city.cityId}, city_id),
 		pin = IF(#{address.pin} IS NOT NULL, #{address.pin}, pin);
-    </insert>    
+    </insert> 
+
+     <insert id="insertAddressForEmployee" parameterType="java.util.HashMap" useGeneratedKeys="true"  keyProperty="customerId">
+        INSERT INTO wiper.emp_corr_add
+        (
+        id,
+        emp_id,
+        flat_no,
+        building,
+        area_id,
+        city_id,
+        pin
+        )
+        VALUES
+        (
+        #{address.addressId},
+        #{employeeId},
+        #{address.flatNo},
+        #{address.building},
+        #{address.area.areaId},
+        #{address.city.cityId},
+        #{address.pin}
+        )
+        ON DUPLICATE KEY 
+        UPDATE flat_no = IF(#{address.flatNo} IS NOT NULL, #{address.name}, flat_no), 
+        building = IF(#{address.building} IS NOT NULL, #{address.building}, building),
+		area_id = IF(#{address.area} IS NOT NULL, #{address.area.areaId}, area_id),
+		city_id = IF(#{address.city} IS NOT NULL, #{address.city.cityId}, city_id),
+		pin = IF(#{address.pin} IS NOT NULL, #{address.pin}, pin);
+    </insert>      
 </mapper>

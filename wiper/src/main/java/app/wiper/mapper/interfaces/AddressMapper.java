@@ -19,4 +19,6 @@ public interface AddressMapper {
 	
 	void insertAddressForCustomer(Map<String, Object> params);
 
+	void insertAddressForEmployee(Map<String, Object> params);
+
 }

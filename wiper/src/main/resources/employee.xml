@@ -27,5 +27,38 @@
    <select id="getEmployeeById" resultMap="employee">
    		select * from employee where emp_id = #{emp_id} 
    </select>
+   
+   <insert id="insertBasicDataForEmployee" parameterType="java.util.HashMap" useGeneratedKeys="true"  keyProperty="employeeId" >
+        INSERT INTO wiper.employee(
+        emp_id ,
+        name,
+        aadhar_number ,
+        is_active,
+        entity_type_id     
+        )
+        VALUES
+        (
+        #{employee.employeeId},
+        #{employee.name},
+        #{employee.aadharNumber},
+        #{employee.isActive},
+        #{employee.entityType.entityTypeId}
+        )
+ 		ON DUPLICATE KEY 
+        UPDATE  name = IF(#{employee.name} IS NOT NULL, #{employee.name}, name), 
+        aadhar_number = IF(#{employee.aadharNumber} IS NOT NULL, #{employee.aadharNumber}, aadhar_number),
+		is_active = IF(#{employee.isActive} IS NOT NULL, #{employee.isActive}, is_active),
+		entity_type_id = IF(#{employee.entityType} IS NOT NULL, #{employee.entityType.entityTypeId}, entity_type_id);	
+      <selectKey keyProperty="employeeId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="employee.employeeId != null">
+                    select #{employee.employeeId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as employeeId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>  
       
 </mapper>

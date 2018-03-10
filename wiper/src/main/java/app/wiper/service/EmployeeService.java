@@ -9,4 +9,6 @@ import app.wiper.domain.core.Employee;
 public interface EmployeeService {
 	
 	Employee getEmployeeById(Integer employeeId);
+	
+	public void insertEmployee(Employee employee);
 }
