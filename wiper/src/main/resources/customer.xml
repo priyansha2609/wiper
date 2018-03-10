@@ -27,5 +27,33 @@
         select * from customer where customer_id = #{customerId}
     </select>
     
- 
+    <insert id="insertCustomerBasicData" parameterType="java.util.HashMap" useGeneratedKeys="true"  keyProperty="customerId">
+        INSERT INTO wiper.customer
+        (
+        customer_id,
+        name,
+        aadhar_number,
+        is_active
+        )
+        VALUES
+        (
+        #{customer.customerId},
+        #{customer.name},
+        #{customer.aadharNumber},
+        #{customer.isActive}
+        )
+        ON DUPLICATE KEY 
+        UPDATE name = IF(#{customer.name} IS NOT NULL, #{customer.name}, name), aadhar_number = IF(#{customer.aadharNumber} IS NOT NULL, #{customer.aadharNumber}, aadhar_number),
+		entity_type_id = IF(#{customer.entityType} IS NOT NULL, #{customer.entityType.entityTypeId}, entity_type_id),is_active = IF(#{customer.isActive} IS NOT NULL, #{customer.isActive}, is_active);
+         <selectKey keyProperty="customerId" resultType="Integer">
+            <choose>
+                <when test="customer.customerId != null">
+                    select #{customer.customerId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as customerId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>   
 </mapper>

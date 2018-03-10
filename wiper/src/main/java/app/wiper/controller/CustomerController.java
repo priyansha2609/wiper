@@ -1,7 +1,9 @@
 package app.wiper.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,5 +20,12 @@ public class CustomerController {
 	@RequestMapping("/getCustomerById")
 	public Customer getCustomerById(@RequestParam Integer customerId){
 		return customerService.getCustomerById(customerId);
+	}
+	
+	@RequestMapping(method= RequestMethod.POST, value="/insertCustomerBasicData")
+	public void insertCustomerBasicData(@RequestBody Customer customer){
+		 customerService.insertCustomerBasicData(customer);
+		 Integer customerId = customer.getCustomerId();
+		 Integer test = customerId;
 	}
 }

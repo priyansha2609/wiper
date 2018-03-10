@@ -1,5 +1,7 @@
 package app.wiper.mapper.interfaces;
 
+import java.util.Map;
+
 import app.wiper.domain.core.CorrespondenceAddress;
 import app.wiper.domain.core.VehicleAddress;
 import app.wiper.domain.type.Area;
@@ -14,5 +16,7 @@ public interface AddressMapper {
 	City getCityById(Integer cityId);
 	
 	CorrespondenceAddress getCorrespondenceAddressByCustomerId(Integer customerId);
+	
+	void insertAddressForCustomer(Map<String, Object> params);
 
 }

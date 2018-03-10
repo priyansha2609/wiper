@@ -78,7 +78,61 @@
     <select id="getCorrespondenceAddressByEmployeeId" resultMap="correspondenceAddress">
         select * from emp_corr_add where emp_id = #{employeeId}
     </select>
-   
     
-    
+     <insert id="insertAddressForCustomer" parameterType="java.util.HashMap">
+        DECLARE @ValuesToInsertTempTable TABLE (
+        customer_id INT ,
+        flat_no VARCHAR(200),
+        building VARCHAR(200),
+        area_id INT,
+        city_id INT,
+        pin INT
+        )
+        INSERT INTO @ValuesToInsertTempTable
+        (
+        customer_id,
+        flat_no,
+        building,
+        area_id,
+        city_id,
+        pin
+        )
+        VALUES
+        (
+        #{customerId},
+        #{address.flatNo},
+        #{address.building},
+        #{address.area.areaId},
+        #{address.city.cityId},
+        #{address.pin}
+        )
+        MERGE
+        wiper.customer
+        USING @ValuesToInsertTempTable AS source
+        ON
+        wiper.customer.customer_id=source.customer_id
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+        flat_no,
+        building,
+        area_id,
+        city_id,
+        pin
+        )
+        VALUES (
+        source.flat_no,
+        source.building,
+        source.area_id,
+        source.city_id,
+        source.pin
+        )
+        WHEN MATCHED THEN
+        UPDATE SET
+        flat_no = source.flat_no,
+        building = source.building,
+        area_id = source.area_id,
+        city_id = source.city_id;
+        pin = source.pin
+    </insert>    
 </mapper>
