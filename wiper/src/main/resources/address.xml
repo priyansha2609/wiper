@@ -50,6 +50,7 @@
     </select>
 
     <resultMap id="correspondenceAddress" type="app.wiper.domain.core.CorrespondenceAddress">
+    		<result property="addressId" column="id" jdbcType="VARCHAR" />
         <result property="flatNo" column="flat_no" jdbcType="VARCHAR" />
         <result property="building" column="building" jdbcType="VARCHAR" />
         <result property="pin" column="pin" jdbcType="INTEGER" />

@@ -71,5 +71,26 @@
             </choose>
         </selectKey>
     </insert>  
+    
+   <insert id="insertLocationForEmployee" parameterType="java.util.HashMap" >
+        INSERT INTO wiper.employee_location
+        (
+        emp_location_id,
+        emp_id,
+        location_id,
+        is_active
+        )
+        VALUES
+        (
+        #{employeeLocation.employeeLocationId},
+        #{employeeId},
+        #{employeeLocation.location.locationId},
+        #{employeeLocation.isActive}
+        )
+        ON DUPLICATE KEY 
+        UPDATE emp_id = IF(#{employeeId} IS NOT NULL, #{employeeId}, emp_id), 
+        location_id = IF(#{employeeLocation.location} IS NOT NULL, #{employeeLocation.location.locationId}, location_id),
+	    is_active = IF(#{employeeLocation.isActive} IS NOT NULL, #{employeeLocation.isActive}, is_active);
+    </insert>  
       
 </mapper>

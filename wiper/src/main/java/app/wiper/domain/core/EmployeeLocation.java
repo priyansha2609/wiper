@@ -1,7 +1,14 @@
 package app.wiper.domain.core;
 
-public class EmployeeLocation {
-	
+import java.io.Serializable;
+
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
+public class EmployeeLocation implements Serializable{
 	Integer employeeLocationId;
 	Location location;
 	Boolean isActive;
