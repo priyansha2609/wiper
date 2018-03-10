@@ -16,17 +16,28 @@
             javaType="app.wiper.domain.type.EntityType" select="app.wiper.mapper.interfaces.EntityTypeMapper.getEntityTypeById" />
         <association property="correspondenceAddress" column="emp_id"
             javaType="app.wiper.domain.core.CorrespondenceAddress" select="app.wiper.mapper.interfaces.AddressMapper.getCorrespondenceAddressByEmployeeId" />
-        <collection property="locations" column="emp_id"
+        <collection property="employeeLocations" column="emp_id"
             ofType="app.wiper.domain.core.EmployeeLocation" select="getLocationsForEmployee" />
     </resultMap>
+    
+    <resultMap id="employeeLocation" type="app.wiper.domain.core.EmployeeLocation">
+     	 <result property="employeeLocationId" column="emp_location_id" jdbcType="INTEGER" />
+     	 <result property="isActive" column="is_active" jdbcType="BIT" />
+         <association property="location" column="location_id"
+            javaType="app.wiper.domain.core.Location" select="getLocationById" />   
+    </resultMap>
         
-   <select id="getLocationsForEmployee" resultMap="app.wiper.mapper.interfaces.AddressMapper.location">
+   <select id="getLocationsForEmployee" resultMap="employeeLocation">
    		select * from employee_location where emp_id = #{emp_id} and is_active = 1;
    </select>
            
    <select id="getEmployeeById" resultMap="employee">
    		select * from employee where emp_id = #{emp_id} 
    </select>
+   
+   <select id="getLocationById" resultMap="app.wiper.mapper.interfaces.AddressMapper.location">
+        select * from location where location_id = #{location_id}
+    </select>
    
    <insert id="insertBasicDataForEmployee" parameterType="java.util.HashMap" useGeneratedKeys="true"  keyProperty="employeeId" >
         INSERT INTO wiper.employee(

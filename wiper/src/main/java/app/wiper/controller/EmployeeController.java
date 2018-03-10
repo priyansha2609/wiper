@@ -17,8 +17,8 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 	
 	@RequestMapping("/getEmployeeById")
-	public Employee getEmployeeById(@RequestParam Integer id){
-		return employeeService.getEmployeeById(id);
+	public Employee getEmployeeById(@RequestParam Integer employeeId){
+		return employeeService.getEmployeeById(employeeId);
 	}
 	
 	@RequestMapping(method= RequestMethod.POST, value="/insertEmployee")

@@ -130,7 +130,7 @@
         #{address.pin}
         )
         ON DUPLICATE KEY 
-        UPDATE flat_no = IF(#{address.flatNo} IS NOT NULL, #{address.name}, flat_no), 
+        UPDATE flat_no = IF(#{address.flatNo} IS NOT NULL, #{address.flatNo}, flat_no), 
         building = IF(#{address.building} IS NOT NULL, #{address.building}, building),
 		area_id = IF(#{address.area} IS NOT NULL, #{address.area.areaId}, area_id),
 		city_id = IF(#{address.city} IS NOT NULL, #{address.city.cityId}, city_id),
