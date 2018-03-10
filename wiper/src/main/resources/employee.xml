@@ -17,11 +17,11 @@
         <association property="correspondenceAddress" column="emp_id"
             javaType="app.wiper.domain.core.CorrespondenceAddress" select="app.wiper.mapper.interfaces.AddressMapper.getCorrespondenceAddressByEmployeeId" />
         <collection property="locations" column="emp_id"
-            ofType="app.wiper.domain.core.Location" select="getLocationsForEmployee" />
+            ofType="app.wiper.domain.core.EmployeeLocation" select="getLocationsForEmployee" />
     </resultMap>
         
    <select id="getLocationsForEmployee" resultMap="app.wiper.mapper.interfaces.AddressMapper.location">
-   		select * from employee_location where emp_id = #{emp_id} 
+   		select * from employee_location where emp_id = #{emp_id} and is_active = 1;
    </select>
            
    <select id="getEmployeeById" resultMap="employee">

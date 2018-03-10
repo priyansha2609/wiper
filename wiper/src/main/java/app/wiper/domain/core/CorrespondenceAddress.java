@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CorrespondenceAddress {
+	Integer addressId;
 	String flatNo;
 	String building;
 	Area area;

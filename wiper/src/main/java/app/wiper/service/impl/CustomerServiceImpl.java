@@ -26,7 +26,6 @@ public class CustomerServiceImpl implements CustomerService {
 		return customerMapper.getCustomerById(customerId);
 	}
 	
-	@Override
 	public void insertAddressForCustomer(Integer customerId, CorrespondenceAddress corrAdd) {
 		Map<String, Object> params = new HashMap<>();
         params.put("customerId", customerId);
@@ -35,11 +34,18 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public void insertCustomerBasicData(Customer customer) {
+	public Integer insertCustomerBasicData(Customer customer) {
 		Map<String, Object> params = new HashMap<>();
         params.put("customer", customer);
         customerMapper.insertCustomerBasicData(params);
         Integer customerId = (Integer) params.get("customerId");
-        customer.setCustomerId(customerId);
+        return customerId;       
+	}
+	
+
+	public void insertCustomer(Customer customer) {
+		Integer customerId = insertCustomerBasicData(customer);
+		customer.setCustomerId(customerId);
+		insertAddressForCustomer(customerId, customer.getCorrespondenceAddress());
 	}
 }

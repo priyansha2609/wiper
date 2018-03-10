@@ -80,16 +80,9 @@
     </select>
     
      <insert id="insertAddressForCustomer" parameterType="java.util.HashMap">
-        DECLARE @ValuesToInsertTempTable TABLE (
-        customer_id INT ,
-        flat_no VARCHAR(200),
-        building VARCHAR(200),
-        area_id INT,
-        city_id INT,
-        pin INT
-        )
-        INSERT INTO @ValuesToInsertTempTable
+        INSERT INTO wiper.customer
         (
+        id,
         customer_id,
         flat_no,
         building,
@@ -99,6 +92,7 @@
         )
         VALUES
         (
+        #{address.addressId},
         #{customerId},
         #{address.flatNo},
         #{address.building},
@@ -106,33 +100,11 @@
         #{address.city.cityId},
         #{address.pin}
         )
-        MERGE
-        wiper.customer
-        USING @ValuesToInsertTempTable AS source
-        ON
-        wiper.customer.customer_id=source.customer_id
-        WHEN NOT MATCHED THEN
-        INSERT
-        (
-        flat_no,
-        building,
-        area_id,
-        city_id,
-        pin
-        )
-        VALUES (
-        source.flat_no,
-        source.building,
-        source.area_id,
-        source.city_id,
-        source.pin
-        )
-        WHEN MATCHED THEN
-        UPDATE SET
-        flat_no = source.flat_no,
-        building = source.building,
-        area_id = source.area_id,
-        city_id = source.city_id;
-        pin = source.pin
+        ON DUPLICATE KEY 
+        UPDATE flat_no = IF(#{address.flatNo} IS NOT NULL, #{address.name}, flat_no), 
+        building = IF(#{address.building} IS NOT NULL, #{address.building}, building),
+		area_id = IF(#{address.area} IS NOT NULL, #{address.area.areaId}, area_id),
+		city_id = IF(#{address.city} IS NOT NULL, #{address.city.cityId}, city_id),
+		pin = IF(#{address.pin} IS NOT NULL, #{address.pin}, pin);
     </insert>    
 </mapper>

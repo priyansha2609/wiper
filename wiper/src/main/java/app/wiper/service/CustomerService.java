@@ -11,5 +11,5 @@ public interface CustomerService {
 	
 	void insertAddressForCustomer(Integer cusotmerId, CorrespondenceAddress corrAdd);
 
-	void insertCustomerBasicData(Customer customer);
+	Integer insertCustomerBasicData(Customer customer);
 }

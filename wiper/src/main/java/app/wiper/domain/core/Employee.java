@@ -16,6 +16,6 @@ public class Employee{
 	String aadharNumber;
 	EntityType entityType;
 	CorrespondenceAddress correspondenceAddress;
-	List<Location> locations;
+	List<EmployeeLocation> employeeLocations;
 	Boolean isActive;
 }
