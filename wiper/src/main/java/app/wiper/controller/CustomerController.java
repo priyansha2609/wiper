@@ -24,8 +24,7 @@ public class CustomerController {
 	
 	@RequestMapping(method= RequestMethod.POST, value="/insertCustomerBasicData")
 	public void insertCustomerBasicData(@RequestBody Customer customer){
-		 customerService.insertCustomerBasicData(customer);
-		 Integer customerId = customer.getCustomerId();
-		 Integer test = customerId;
+		 customerService.insertCustomer(customer);
+		
 	}
 }

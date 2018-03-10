@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
         addressMapper.insertAddressForCustomer(params);
 	}
 
-	@Override
+	
 	public Integer insertCustomerBasicData(Customer customer) {
 		Map<String, Object> params = new HashMap<>();
         params.put("customer", customer);
@@ -42,10 +42,11 @@ public class CustomerServiceImpl implements CustomerService {
         return customerId;       
 	}
 	
-
+	@Override
 	public void insertCustomer(Customer customer) {
 		Integer customerId = insertCustomerBasicData(customer);
 		customer.setCustomerId(customerId);
 		insertAddressForCustomer(customerId, customer.getCorrespondenceAddress());
 	}
+	
 }
