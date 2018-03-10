@@ -27,5 +27,41 @@
     <select id="getVehicleById" resultMap="vehicle">
         select * from vehicle where vehicle_id = #{vehicleId}
     </select>
+    
+     <insert id="insertBasicDataForVehicle" parameterType="java.util.HashMap" useGeneratedKeys="true"  keyProperty="vehicleId">
+        INSERT INTO wiper.vehicle(
+        vehicle_id ,
+        customer_id,
+        vehicle_number,
+        vehicle_type_id,
+        comments,
+        is_active 
+        )
+        VALUES
+        (
+        #{vehicle.vehicleId},
+        #{customerId},
+        #{vehicle.vehicleNumber},
+        #{vehicle.vehicleType.vehicleTypeId},
+        #{vehicle.comments},
+        #{vehicle.isActive}
+        )
+ 		ON DUPLICATE KEY 
+        UPDATE  customer_id = IF(#{customerId} IS NOT NULL, #{customerId}, customer_id), 
+        vehicle_number = IF(#{vehicle.vehicleNumber} IS NOT NULL, #{vehicle.vehicleNumber}, vehicle_number),
+		vehicle_type_id = IF(#{vehicle.vehicleType} IS NOT NULL, #{vehicle.vehicleType.vehicleTypeId}, vehicle_type_id),
+		comments = IF(#{vehicle.comments} IS NOT NULL, #{vehicle.comments}, comments),
+		is_active = IF(#{vehicle.isActive} IS NOT NULL, #{vehicle.isActive}, is_active);
+		 <selectKey keyProperty="vehicleId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="vehicle.vehicleId != null">
+                    select #{vehicle.vehicleId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as vehicleId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>  
  
 </mapper>

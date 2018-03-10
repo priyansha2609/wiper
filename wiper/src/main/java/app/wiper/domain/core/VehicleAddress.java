@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VehicleAddress {
+	Integer addressId;
 	String parkingLotNo;
 	String floor;
 	String building;

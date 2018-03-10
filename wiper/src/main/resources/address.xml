@@ -136,5 +136,36 @@
 		area_id = IF(#{address.area} IS NOT NULL, #{address.area.areaId}, area_id),
 		city_id = IF(#{address.city} IS NOT NULL, #{address.city.cityId}, city_id),
 		pin = IF(#{address.pin} IS NOT NULL, #{address.pin}, pin);
-    </insert>      
+    </insert>   
+    
+      <insert id="insertAddressForVehicle" parameterType="java.util.HashMap">
+        INSERT INTO wiper.vehicle_add(
+        id,
+        vehicle_id ,
+        lot_num,
+        floor ,
+        building,
+        pin ,
+        area_id ,
+        city_id
+        )
+        VALUES
+        (
+        #{address.addressId},
+        #{vehicleId},
+        #{address.parkingLotNo},
+        #{address.floor},
+        #{address.building},
+        #{address.pin},
+        #{address.area.areaId},
+        #{address.city.cityId}
+        )
+ 		ON DUPLICATE KEY 
+        UPDATE  lot_num = IF(#{address.parkingLotNo} IS NOT NULL, #{address.parkingLotNo}, lot_num), 
+        floor = IF(#{address.floor} IS NOT NULL, #{address.floor}, floor),
+		building = IF(#{address.building} IS NOT NULL, #{address.building}, building),
+		pin = IF(#{address.pin} IS NOT NULL, #{address.pin}, pin),
+		area_id = IF(#{address.area.areaId} IS NOT NULL, #{address.area.areaId}, area_id),
+		city_id = IF(#{address.city.cityId} IS NOT NULL, #{address.city.cityId}, city_id);
+    </insert>     
 </mapper>
