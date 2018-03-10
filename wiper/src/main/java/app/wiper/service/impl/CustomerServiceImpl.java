@@ -39,5 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Map<String, Object> params = new HashMap<>();
         params.put("customer", customer);
         customerMapper.insertCustomerBasicData(params);
+        Integer customerId = (Integer) params.get("customerId");
+        customer.setCustomerId(customerId);
 	}
 }

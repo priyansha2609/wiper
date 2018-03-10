@@ -8,6 +8,6 @@ public interface CustomerMapper {
 	
 	Customer getCustomerById(Integer id);
 	
-	void insertCustomerBasicData(Map<String, Object> params);
+	Integer insertCustomerBasicData(Map<String, Object> params);
 
 }
