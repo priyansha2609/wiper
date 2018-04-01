@@ -22,35 +22,4 @@
 hs_err_pid*
 
 
-wiper-frontend/wiper/*~
-wiper-frontend/wiper/*.sw[mnpcod]
-wiper-frontend/wiper/*.log
-wiper-frontend/wiper/*.tmp
-wiper-frontend/wiper/*.tmp.*
-wiper-frontend/wiper/log.txt
-wiper-frontend/wiper/*.sublime-project
-wiper-frontend/wiper/*.sublime-workspace
-wiper-frontend/wiper/.vscode/
-wiper-frontend/wiper/npm-debug.log*
 
-wiper-frontend/wiper/.idea/
-wiper-frontend/wiper/.sourcemaps/
-wiper-frontend/wiper/.sass-cache/
-wiper-frontend/wiper/.tmp/
-wiper-frontend/wiper/.versions/
-wiper-frontend/wiper/coverage/
-wiper-frontend/wiper/dist/
-wiper-frontend/wiper/node_modules/
-wiper-frontend/wiper/tmp/
-wiper-frontend/wiper/temp/
-wiper-frontend/wiper/hooks/
-wiper-frontend/wiper/platforms/
-wiper-frontend/wiper/plugins/
-wiper-frontend/wiper/plugins/android.json
-wiper-frontend/wiper/plugins/ios.json
-wiper-frontend/wiper/www/
-wiper-frontend/wiper/$RECYCLE.BIN/
-
-wiper-frontend/wiper/.DS_Store
-wiper-frontend/wiper/Thumbs.db
-wiper-frontend/wiper/UserInterfaceState.xcuserstate
