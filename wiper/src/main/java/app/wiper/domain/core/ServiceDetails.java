@@ -2,7 +2,7 @@ package app.wiper.domain.core;
 
 import java.util.Date;
 
-import app.wiper.domain.type.Service;
+import app.wiper.domain.type.ServiceType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +10,11 @@ import lombok.Setter;
 @Setter
 public class ServiceDetails {
 	Integer serviceDetailId;
-	Service service;
+    Integer vehicleId;
+	ServiceType service;
 	Date subscriptionStartDate;
 	Date subscriptionEndDate;
 	Float amountPaid;
 	Integer bufferDaysAvailed;
-	Payment payment;
 	Boolean isActive;
 }

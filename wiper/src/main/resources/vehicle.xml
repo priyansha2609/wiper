@@ -11,7 +11,7 @@
         <result property="vehicleNumber" column="vehicle_number" jdbcType="VARCHAR" />
         <result property="comments" column="comments" jdbcType="VARCHAR" />
         <result property="isActive" column="is_active" jdbcType="BIT" />
-    		<association property="vehicleType" column="vehicle_type_id"
+        <association property="vehicleType" column="vehicle_type_id"
             javaType="app.wiper.domain.type.VehicleType" select="app.wiper.mapper.interfaces.VehicleTypeMapper.getVehicleTypeById" />
        <association property="vehicleAddress" column="vehicle_id"
             javaType="app.wiper.domain.core.VehicleAddress" select="app.wiper.mapper.interfaces.AddressMapper.getAddressForVehicle" />

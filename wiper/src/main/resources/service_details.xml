@@ -6,18 +6,63 @@
 <mapper namespace="app.wiper.mapper.interfaces.ServiceDetailsMapper">
     <resultMap id="serviceDetails" type="app.wiper.domain.core.ServiceDetails">
         <result property="serviceDetailId" column="service_detail_id" jdbcType="INTEGER" />
-        <!--  <result property="service" column="vehicle_number" jdbcType="VARCHAR" />-->
+        <result property="vehicleId" column="vehicle_id" jdbcType="INTEGER" />
         <result property="subscriptionStartDate" column="subscription_start_date" jdbcType="TIMESTAMP" />
         <result property="subscriptionEndDate" column="subscription_end_date" jdbcType="TIMESTAMP" />
-        <result property="amountPaid" column="amount_paid" jdbcType="FLOAT" />
+        <!--<result property="amountPaid" column="amount_paid" jdbcType="FLOAT" />-->
         <result property="isActive" column="is_active" jdbcType="BIT" />
         <result property="bufferDaysAvailed" column="buffer_days_availed" jdbcType="INTEGER" />
-    		<association property="payment" column="payment_id"
-            javaType="app.wiper.domain.core.Payment" select="app.wiper.mapper.interfaces.PaymentMapper.getPaymentById" />
-      </resultMap>
-    
+        <association property="service" column="service_type_id" javaType="app.wiper.domain.type.ServiceType"
+                     select="app.wiper.mapper.interfaces.ServiceTypeMapper.getServiceTypeById" />
+    </resultMap>
+
     <select id="getServiceDetailsForVehicle" resultMap="serviceDetails">
         select * from service_details where vehicle_id = #{vehicleId}
     </select>
-     
+    <select id="getServiceDetailsById" resultMap="serviceDetails">
+        select * from service_details where service_detail_id = #{serviceDetailsId}
+    </select>
+    <select id="getServiceDetailsForPaymentId" resultMap="serviceDetails">
+        select * from service_details where service_detail_id in (select service_detail_id from service_payment_rel where payment_id = #{paymentId})
+    </select>
+
+    <insert id="upsertServiceDetails" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="serviceDetailId" >
+        INSERT INTO service_details
+        (
+        service_detail_id,
+        vehicle_id,
+        service_type_id,
+        subscription_start_date,
+        subscription_end_date,
+        buffer_days_availed,
+        is_active
+        )
+        VALUES
+        (
+        #{serviceDetails.serviceDetailId},
+        #{serviceDetails.vehicleId},
+        #{serviceDetails.service.serviceTypeId},
+        #{serviceDetails.subscriptionStartDate},
+        #{serviceDetails.subscriptionEndDate},
+        #{serviceDetails.bufferDaysAvailed},
+        #{serviceDetails.isActive}
+        )
+        ON DUPLICATE KEY
+        UPDATE vehicle_id = IF(#{serviceDetails.vehicleId} IS NOT NULL, #{serviceDetails.vehicleId}, vehicle_id),
+        service_type_id =  IF(#{serviceDetails.service.serviceTypeId} IS NOT NULL, #{serviceDetails.service.serviceTypeId}, service_type_id),
+        subscription_start_date = IF(#{serviceDetails.subscriptionStartDate} IS NOT NULL, #{serviceDetails.subscriptionStartDate}, subscription_start_date),
+        subscription_end_date = IF(#{serviceDetails.subscriptionEndDate} IS NOT NULL, #{serviceDetails.subscriptionEndDate}, subscription_end_date),
+        buffer_days_availed = IF(#{serviceDetails.bufferDaysAvailed} IS NOT NULL, #{serviceDetails.bufferDaysAvailed}, buffer_days_availed),
+        is_active = IF(#{serviceDetails.isActive} IS NOT NULL, #{serviceDetails.isActive}, is_active);
+        <selectKey keyProperty="serviceDetailId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="serviceDetails.serviceDetailId != null">
+                    select #{serviceDetails.serviceDetailId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as serviceDetailId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
 </mapper>
