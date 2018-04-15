@@ -13,8 +13,45 @@
         <result property="isActive" column="is_active" jdbcType="BIT" />
     </resultMap>
 
+    <select id="getAllServiceTypes" resultMap="serviceType">
+        select * from service_type
+    </select>
+
     <select id="getServiceTypeById" resultMap="serviceType">
         select * from service_type where service_type_id = #{serviceTypeId}
     </select>
 
+    <insert id="upsertServiceType" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="serviceTypeId" >
+        INSERT INTO service_type
+        (
+        service_type_id,
+        name,
+        description,
+        order_id,
+        is_active
+        )
+        VALUES
+        (
+        #{serviceType.serviceTypeId},
+        #{serviceType.name},
+        #{serviceType.description},
+        #{serviceType.orderId},
+        #{serviceType.isActive}
+        )
+        ON DUPLICATE KEY
+        UPDATE name = IF(#{serviceType.name} IS NOT NULL, #{serviceType.name}, name),
+        description =  IF(#{serviceType.description} IS NOT NULL, #{serviceType.description}, description),
+        order_id = IF(#{serviceType.orderId} IS NOT NULL, #{serviceType.orderId}, order_id),
+        is_active = IF(#{serviceType.isActive} IS NOT NULL, #{serviceType.isActive}, is_active);
+        <selectKey keyProperty="serviceTypeId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="serviceType.serviceTypeId != null">
+                    select #{serviceType.serviceTypeId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as serviceTypeId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
 </mapper>

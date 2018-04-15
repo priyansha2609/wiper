@@ -18,6 +18,39 @@
     <select id="getVehicleTypeById" resultMap="vehicleType">
         select * from vehicle_type where vehicle_type_id = #{vehicleTypeId}
     </select>
- 
+
+    <insert id="upsertVehicleType" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="vehicleTypeId" >
+        INSERT INTO vehicle_type
+        (
+        vehicle_type_id,
+        name,
+        description,
+        is_active,
+        order_id
+        )
+        VALUES
+        (
+        #{vehicleType.vehicleTypeId},
+        #{vehicleType.name},
+        #{vehicleType.description},
+        #{vehicleType.isActive},
+        #{vehicleType.orderId}
+        )
+        ON DUPLICATE KEY
+        UPDATE name =  IF(#{vehicleType.name} IS NOT NULL, #{vehicleType.name}, name),
+        description = IF(#{vehicleType.description} IS NOT NULL, #{vehicleType.description}, description),
+        is_active = IF(#{vehicleType.isActive} IS NOT NULL, #{vehicleType.isActive}, is_active),
+        order_id = IF(#{vehicleType.orderId} IS NOT NULL, #{vehicleType.orderId}, order_id);
+        <selectKey keyProperty="vehicleTypeId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="vehicleType.vehicleTypeId != null">
+                    select #{vehicleType.vehicleTypeId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as vehicleTypeId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
 </mapper>
 

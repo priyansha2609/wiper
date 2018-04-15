@@ -2,10 +2,11 @@ package app.wiper.controller;
 
 import java.util.List;
 
+import app.wiper.domain.core.Rate;
+import app.wiper.domain.type.ServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,37 @@ public class MetadataController {
 	public List<EntityType> getAllEntityTypes(){
 		return metaDataService.getAllEntityTypes();
 	}
+
+    @RequestMapping("/getAllServiceTypes")
+    public List<ServiceType> getAllServiceTypes()
+    {
+        return metaDataService.getAllServiceTypes();
+    }
+
+    @RequestMapping("/getAllRates")
+    public List<Rate> getAllRates()
+    {
+        return metaDataService.getAllRates();
+    }
+
+    @RequestMapping("/getServiceTypeById")
+    public ServiceType getServiceTypeById(@RequestParam Integer id)
+    {
+        return metaDataService.getServiceTypeById(id);
+    }
+
+    @RequestMapping("/getRateById")
+    public Rate getRateById(@RequestParam Integer id)
+    {
+        return metaDataService.getRateById(id);
+    }
+
+    @RequestMapping("/getRateForServiceAndVehicleType")
+    public Rate getRateForServiceAndVehicleType(@RequestParam("serviceTypeId") Integer serviceTypeId,
+                                                @RequestParam("vehicleTypeId") Integer vehicleTypeId)
+    {
+        return metaDataService.getRateForServiceAndVehicleType(serviceTypeId, vehicleTypeId);
+    }
 
 	@RequestMapping("/getVehicleTypeById")
 	public VehicleType getVehicleTypeById(@RequestParam Integer id){

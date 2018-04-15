@@ -1,8 +1,14 @@
 package app.wiper.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import app.wiper.domain.core.Rate;
+import app.wiper.domain.type.ServiceType;
+import app.wiper.mapper.interfaces.RateMapper;
+import app.wiper.mapper.interfaces.ServiceTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +27,12 @@ public class MetaDataServiceImpl implements MetaDataService{
 	@Autowired
 	EntityTypeMapper entityTypeMapper;
 
+    @Autowired
+    ServiceTypeMapper serviceTypeMapper;
+
+    @Autowired
+    RateMapper rateMapper;
+
 	@Override
 	public List<VehicleType> getAllVehicleTypes() {
 		List<VehicleType> vehicleTypes = new ArrayList<>();
@@ -34,7 +46,19 @@ public class MetaDataServiceImpl implements MetaDataService{
 		entityTypes = entityTypeMapper.getAllEntityTypes();
 		return entityTypes;
 	}
- 
+
+    @Override
+    public List<ServiceType> getAllServiceTypes()
+    {
+        return serviceTypeMapper.getAllServiceTypes();
+    }
+
+    @Override
+    public List<Rate> getAllRates()
+    {
+        return rateMapper.getAllRates();
+    }
+
     @Override
    	public VehicleType getVehicleTypeById(Integer id) {
     		return vehicleTypeMapper.getVehicleTypeById(id);
@@ -45,6 +69,25 @@ public class MetaDataServiceImpl implements MetaDataService{
 		return entityTypeMapper.getEntityTypeById(id);
 		
 	}
-	
 
+    @Override
+    public ServiceType getServiceTypeById(Integer id)
+    {
+        return serviceTypeMapper.getServiceTypeById(id);
+    }
+
+    @Override
+    public Rate getRateById(Integer id)
+    {
+        return rateMapper.getRateById(id);
+    }
+
+    @Override
+    public Rate getRateForServiceAndVehicleType(Integer serviceTypeId, Integer vehicleTypeId)
+    {
+        Map<String, Object> params = new HashMap<>();
+        params.put("serviceTypeId", serviceTypeId);
+        params.put("vehicleTypeId", vehicleTypeId);
+        return rateMapper.getRateForServiceAndVehicleType(params);
+    }
 }

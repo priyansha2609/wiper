@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.RateMapper">
+
+    <resultMap id="rate" type="app.wiper.domain.core.Rate">
+        <result property="rateId" column="id" jdbcType="INTEGER" />
+        <result property="price" column="price" jdbcType="DOUBLE" />
+        <result property="effectiveStartDate" column="effective_start_date" jdbcType="TIMESTAMP" />
+        <result property="effectiveEndDate" column="effective_end_date" jdbcType="TIMESTAMP" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+        <association property="serviceType" column="service_type_id"
+                     javaType="app.wiper.domain.type.ServiceType"
+                     select="app.wiper.mapper.interfaces.ServiceTypeMapper.getServiceTypeById" />
+        <association property="vehicleType" column="vehicle_type_id"
+                     javaType="app.wiper.domain.type.VehicleType"
+                     select="app.wiper.mapper.interfaces.VehicleTypeMapper.getVehicleTypeById" />
+    </resultMap>
+
+    <select id="getAllRates" resultMap="rate">
+        select * from rate
+    </select>
+    <select id="getRateById" resultMap="rate">
+        select * from rate where id = #{rateId}
+    </select>
+    <select id="getRateForServiceAndVehicleType" resultMap="rate" >
+        select * from rate where service_type_id = #{serviceTypeId} and vehicle_type_id = #{vehicleTypeId}
+    </select>
+
+    <insert id="upsertServiceRate" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="rateId" >
+        INSERT INTO rate
+        (
+        id,
+        service_type_id,
+        vehicle_type_id,
+        effective_start_date,
+        effective_end_date,
+        price,
+        is_active
+        )
+        VALUES
+        (
+        #{rate.rateId},
+        #{rate.serviceType.serviceTypeId},
+        #{rate.vehicleType.vehicleTypeId},
+        #{rate.effectiveStartDate},
+        #{rate.effectiveEndDate},
+        #{rate.price},
+        #{rate.isActive}
+        )
+        ON DUPLICATE KEY
+        UPDATE vehicle_type_id = IF(#{rate.vehicleType.vehicleTypeId} IS NOT NULL, #{rate.vehicleType.vehicleTypeId}, vehicle_type_id),
+        service_type_id =  IF(#{rate.serviceType.serviceTypeId} IS NOT NULL, #{rate.serviceType.serviceTypeId}, service_type_id),
+        effective_start_date = IF(#{rate.effectiveStartDate} IS NOT NULL, #{rate.effectiveStartDate}, effective_start_date),
+        effective_end_date = IF(#{rate.effectiveEndDate} IS NOT NULL, #{rate.effectiveEndDate}, effective_end_date),
+        price = IF(#{rate.price} IS NOT NULL, #{rate.price}, price),
+        is_active = IF(#{rate.isActive} IS NOT NULL, #{rate.isActive}, is_active);
+        <selectKey keyProperty="rateId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="rate.rateId != null">
+                    select #{rate.rateId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as rateId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
+</mapper>
