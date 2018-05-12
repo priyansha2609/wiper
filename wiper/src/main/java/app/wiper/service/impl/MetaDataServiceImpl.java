@@ -12,8 +12,11 @@ import app.wiper.mapper.interfaces.ServiceTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import app.wiper.domain.type.Area;
+import app.wiper.domain.type.City;
 import app.wiper.domain.type.EntityType;
 import app.wiper.domain.type.VehicleType;
+import app.wiper.mapper.interfaces.AddressMapper;
 import app.wiper.mapper.interfaces.EntityTypeMapper;
 import app.wiper.mapper.interfaces.VehicleTypeMapper;
 import app.wiper.service.MetaDataService;
@@ -26,6 +29,10 @@ public class MetaDataServiceImpl implements MetaDataService{
 	
 	@Autowired
 	EntityTypeMapper entityTypeMapper;
+	
+
+	@Autowired
+	AddressMapper addressMapper;
 
     @Autowired
     ServiceTypeMapper serviceTypeMapper;
@@ -69,6 +76,21 @@ public class MetaDataServiceImpl implements MetaDataService{
 		return entityTypeMapper.getEntityTypeById(id);
 		
 	}
+
+	@Override
+	public List<City> getAllCities() {
+		List<City> cities = new ArrayList<>();
+		cities = addressMapper.getAllCities();
+		return cities;
+	}
+
+	@Override
+	public List<Area> getAllAreas() {
+		List<Area> areas = new ArrayList<>();
+		areas = addressMapper.getAllAreas();
+		return areas;
+	}
+	
 
     @Override
     public ServiceType getServiceTypeById(Integer id)

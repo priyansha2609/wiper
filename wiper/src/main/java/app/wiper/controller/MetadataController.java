@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.wiper.domain.type.Area;
+import app.wiper.domain.type.City;
 import app.wiper.domain.type.EntityType;
 import app.wiper.domain.type.VehicleType;
 import app.wiper.service.MetaDataService;
@@ -72,6 +74,16 @@ public class MetadataController {
 	@RequestMapping("/getEntityTypeById")
 	public EntityType getEntityTypeById(@RequestParam("id") Integer id){
 		return metaDataService.getEntityTypeById(id);
+	}
+	
+	@RequestMapping("/getAllCities")
+	public List<City> getAllCities(){
+		return metaDataService.getAllCities();
+	}
+	
+	@RequestMapping("/getAllAreas")
+	public List<Area> getAllAreas(){
+		return metaDataService.getAllAreas();
 	}
 	
 }

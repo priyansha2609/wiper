@@ -6,6 +6,8 @@ import app.wiper.domain.core.Rate;
 import app.wiper.domain.type.ServiceType;
 import org.springframework.stereotype.Service;
 
+import app.wiper.domain.type.Area;
+import app.wiper.domain.type.City;
 import app.wiper.domain.type.EntityType;
 import app.wiper.domain.type.VehicleType;
 
@@ -24,4 +26,8 @@ public interface MetaDataService {
     ServiceType getServiceTypeById(Integer id);
     Rate getRateById(Integer id);
     Rate getRateForServiceAndVehicleType(Integer serviceTypeId, Integer vehicleTypeId);
+
+	List<City> getAllCities();
+
+	List<Area> getAllAreas();
 }

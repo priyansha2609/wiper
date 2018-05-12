@@ -61,7 +61,16 @@
     </resultMap>
     
     <select id="getCityById" resultMap="city">
-        select * from city where city_id = #{cityId}
+        select * from city where city_id = #{cityId} 
+    </select>
+    
+    
+    <select id="getAllCities" resultMap="city">
+        select * from city where is_active = 1;
+    </select>
+    
+    <select id="getAllAreas" resultMap="area">
+        select * from area where is_active = 1;
     </select>
     
     <select id="getAddressForVehicle" resultMap="vehicleAddress">

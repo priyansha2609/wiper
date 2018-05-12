@@ -11,5 +11,5 @@ public interface CustomerService {
 	
 	void insertAddressForCustomer(Integer cusotmerId, CorrespondenceAddress corrAdd);
 
-	void insertCustomer(Customer customer);
+	void insertCustomer(Customer customer) throws Exception;
 }

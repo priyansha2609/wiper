@@ -23,7 +23,7 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(method= RequestMethod.POST, value="/insertCustomer")
-	public void insertCustomer(@RequestBody Customer customer){
+	public void insertCustomer(@RequestBody Customer customer) throws Exception{
 		 customerService.insertCustomer(customer);
 	}
 }
