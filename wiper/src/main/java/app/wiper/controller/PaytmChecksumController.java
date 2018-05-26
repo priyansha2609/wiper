@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 public class PaytmChecksumController
 {
@@ -22,7 +24,7 @@ public class PaytmChecksumController
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/paytmRes")
-    public void validatePaytmResponse(@RequestBody TransactionResponseParams transactionResponseParams)
+    public void validatePaytmResponse(@RequestBody Map<String, String> transactionResponseParams)
     {
         System.out.println(transactionResponseParams);
         paytmGatewayManager.validateChecksum(transactionResponseParams);

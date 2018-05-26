@@ -55,12 +55,12 @@ public class PaytmGatewayManager implements GatewayManager
         return checkSum;
     }
 
-    public boolean validateChecksum(final TransactionResponseParams transactionResponseParams)
+    public boolean validateChecksum(final Map<String, String> transactionResponseParams)
     {
         System.out.println(transactionResponseParams);
         String paytmChecksum = "";
 
-        Map<String, String> mapData = new  TreeMap<>();
+        Map<String, String> mapData = new  TreeMap<>(transactionResponseParams);
 
         TreeMap<String, String> paytmParams = new  TreeMap<>();
 
@@ -78,7 +78,7 @@ public class PaytmGatewayManager implements GatewayManager
         try{
 
             isValideChecksum = CheckSumServiceHelper.getCheckSumServiceHelper().verifycheckSum(MercahntKey, paytmParams, paytmChecksum);
-
+            System.out.println(paytmParams);
             System.out.println(isValideChecksum);
 
             // if checksum is validated Kindly verify the amount and status
