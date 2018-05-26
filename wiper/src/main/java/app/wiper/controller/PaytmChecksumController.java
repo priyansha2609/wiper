@@ -1,6 +1,7 @@
 package app.wiper.controller;
 
-import app.wiper.domain.gateway.PaytmParams;
+import app.wiper.domain.gateway.paytm.TransactionRequestParams;
+import app.wiper.domain.gateway.paytm.TransactionResponseParams;
 import app.wiper.service.gateway.paytm.PaytmGatewayManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +16,15 @@ public class PaytmChecksumController
     private PaytmGatewayManager paytmGatewayManager;
 
     @RequestMapping(method=RequestMethod.POST, value="/getPaytmChecksum")
-    public String getPaytmChecksum(@RequestBody PaytmParams paytmParams)
+    public String getPaytmChecksum(@RequestBody TransactionRequestParams transactionRequestParams)
     {
-        System.out.println(paytmParams);
-        return paytmGatewayManager.generateChecksum(paytmParams);
+        return paytmGatewayManager.generateChecksum(transactionRequestParams);
+    }
+
+    @RequestMapping(method=RequestMethod.POST, value="/paytmRes")
+    public void validatePaytmResponse(@RequestBody TransactionResponseParams transactionResponseParams)
+    {
+        System.out.println(transactionResponseParams);
+        paytmGatewayManager.validateChecksum(transactionResponseParams);
     }
 }

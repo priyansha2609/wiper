@@ -1,11 +1,11 @@
-package app.wiper.domain.gateway;
+package app.wiper.domain.gateway.paytm;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PaytmParams
+public class TransactionRequestParams
 {
     private String orderId;
     private String custId;

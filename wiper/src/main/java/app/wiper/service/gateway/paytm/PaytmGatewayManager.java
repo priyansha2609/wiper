@@ -1,7 +1,8 @@
 package app.wiper.service.gateway.paytm;
 
 import app.wiper.domain.core.Payment;
-import app.wiper.domain.gateway.PaytmParams;
+import app.wiper.domain.gateway.paytm.TransactionRequestParams;
+import app.wiper.domain.gateway.paytm.TransactionResponseParams;
 import app.wiper.service.gateway.GatewayManager;
 import com.paytm.pg.merchant.CheckSumServiceHelper;
 import org.springframework.stereotype.Service;
@@ -26,19 +27,19 @@ public class PaytmGatewayManager implements GatewayManager
 
     }
 
-    public String generateChecksum(final PaytmParams paytmParams)
+    public String generateChecksum(final TransactionRequestParams transactionRequestParams)
     {
         TreeMap<String,String> paramMap = new TreeMap<String,String>();
         paramMap.put("MID" , MID);
-        paramMap.put("ORDER_ID" , paytmParams.getOrderId());
-        paramMap.put("CUST_ID" , paytmParams.getCustId());
+        paramMap.put("ORDER_ID" , transactionRequestParams.getOrderId());
+        paramMap.put("CUST_ID" , transactionRequestParams.getCustId());
         paramMap.put("INDUSTRY_TYPE_ID" , INDUSTRY_TYPE_ID);
         paramMap.put("CHANNEL_ID" , CHANNLE_ID);
-        paramMap.put("TXN_AMOUNT", String.valueOf(paytmParams.getTxnAmount()));
+        paramMap.put("TXN_AMOUNT", String.valueOf(transactionRequestParams.getTxnAmount()));
         paramMap.put("WEBSITE" , WEBSITE);
-        paramMap.put("EMAIL" , paytmParams.getEmail());
-        paramMap.put("MOBILE_NO" , paytmParams.getMobile());
-        paramMap.put("CALLBACK_URL" , CALLBACK_URL+paytmParams.getOrderId());
+        paramMap.put("EMAIL" , transactionRequestParams.getEmail());
+        paramMap.put("MOBILE_NO" , transactionRequestParams.getMobile());
+        paramMap.put("CALLBACK_URL" , CALLBACK_URL+ transactionRequestParams.getOrderId());
         System.out.println("Paytm Payload: "+ paramMap);
         String checkSum = "";
         try{
@@ -54,23 +55,24 @@ public class PaytmGatewayManager implements GatewayManager
         return checkSum;
     }
 
-    public boolean validateChecksum(final Payment payment)
+    public boolean validateChecksum(final TransactionResponseParams transactionResponseParams)
     {
+        System.out.println(transactionResponseParams);
         String paytmChecksum = "";
 
-        Map<String, String> mapData = new  TreeMap<String,String>();
+        Map<String, String> mapData = new  TreeMap<>();
 
-        TreeMap<String, String> paytmParams = new  TreeMap<String,String>();
+        TreeMap<String, String> paytmParams = new  TreeMap<>();
 
         for (Map.Entry<String, String> entry : mapData.entrySet())
         {
             if(entry.getKey().equals("CHECKSUMHASH")){
                 paytmChecksum = entry.getKey();
-            }else{
+            }
+            else{
                 paytmParams.put(entry.getKey(), entry.getValue());
             }
         }
-
 
         boolean isValideChecksum = false;
         try{
