@@ -3,50 +3,62 @@ package app.wiper.service.gateway.paytm;
 import app.wiper.domain.core.Payment;
 import app.wiper.domain.gateway.paytm.TransactionRequestParams;
 import app.wiper.domain.gateway.paytm.TransactionResponseParams;
+import app.wiper.mapper.interfaces.PaytmTxnResponseMapper;
 import app.wiper.service.gateway.GatewayManager;
+import app.wiper.domain.gateway.paytm.PaytmConstants.PAYLOAD_PARAMETERS;
+import app.wiper.domain.gateway.paytm.PaytmConstants.MERCHANT_CONSTS;
 import com.paytm.pg.merchant.CheckSumServiceHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import lombok.extern.log4j.Log4j;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 @Service
+@Log4j
 public class PaytmGatewayManager implements GatewayManager
 {
-    //Below parameters provided by Paytm
+    @Autowired
+    private PaytmTxnResponseMapper responseMapper;
 
-    private static String MID = "WiperS96733632560363";
-    private static String MercahntKey = "8u@fS6NCYe@Z@7d%";
-    private static String INDUSTRY_TYPE_ID = "Retail";
-    private static String CHANNLE_ID = "WAP";
-    private static String WEBSITE = "APPSTAGING";
-    private static String CALLBACK_URL = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
     @Override
     public void makePayment(Payment payment)
     {
 
     }
 
+    public boolean validateAndPersistResponse(final TransactionResponseParams responseParams)
+    {
+        boolean isValidResponse = validateChecksum(responseParams);
+        upsertPaytmResponse(responseParams);
+        return isValidResponse;
+    }
+
     public String generateChecksum(final TransactionRequestParams transactionRequestParams)
     {
         TreeMap<String,String> paramMap = new TreeMap<String,String>();
-        paramMap.put("MID" , MID);
-        paramMap.put("ORDER_ID" , transactionRequestParams.getOrderId());
-        paramMap.put("CUST_ID" , transactionRequestParams.getCustId());
-        paramMap.put("INDUSTRY_TYPE_ID" , INDUSTRY_TYPE_ID);
-        paramMap.put("CHANNEL_ID" , CHANNLE_ID);
-        paramMap.put("TXN_AMOUNT", String.valueOf(transactionRequestParams.getTxnAmount()));
-        paramMap.put("WEBSITE" , WEBSITE);
-        paramMap.put("EMAIL" , transactionRequestParams.getEmail());
-        paramMap.put("MOBILE_NO" , transactionRequestParams.getMobile());
-        paramMap.put("CALLBACK_URL" , CALLBACK_URL+ transactionRequestParams.getOrderId());
-        System.out.println("Paytm Payload: "+ paramMap);
+        paramMap.put(PAYLOAD_PARAMETERS.MERCHANT_KEY.getValue(), MERCHANT_CONSTS.MERCHANT_ID.getValue());
+        paramMap.put(PAYLOAD_PARAMETERS.ORDER_ID.getValue(), transactionRequestParams.getOrderId());
+        paramMap.put(PAYLOAD_PARAMETERS.CUSTOMER_ID.getValue(), transactionRequestParams.getCustId());
+        paramMap.put(PAYLOAD_PARAMETERS.INDUSTRY_TYPE_ID.getValue(), MERCHANT_CONSTS.INDUSTRY_TYPE_ID.getValue());
+        paramMap.put(PAYLOAD_PARAMETERS.CHANNEL_ID.getValue(), MERCHANT_CONSTS.CHANNEL_ID.getValue());
+        paramMap.put(PAYLOAD_PARAMETERS.TXN_AMOUNT.getValue(), String.valueOf(transactionRequestParams.getTxnAmount()));
+        paramMap.put(PAYLOAD_PARAMETERS.WEBSITE.getValue(), MERCHANT_CONSTS.WEBSITE_STAGING.getValue());
+        paramMap.put(PAYLOAD_PARAMETERS.EMAIL.getValue(), transactionRequestParams.getEmail());
+        paramMap.put(PAYLOAD_PARAMETERS.PHONE.getValue(), transactionRequestParams.getMobile());
+        paramMap.put(PAYLOAD_PARAMETERS.CALLBACK_URL.getValue(),
+                MERCHANT_CONSTS.CALLBACK_URL_STAGING.getValue() + transactionRequestParams.getOrderId());
+
         String checkSum = "";
         try{
-            checkSum =  CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(MercahntKey, paramMap);
-            paramMap.put("CHECKSUMHASH" , checkSum);
+            checkSum =
+                CheckSumServiceHelper.getCheckSumServiceHelper()
+                    .genrateCheckSum(MERCHANT_CONSTS.MERCHANT_KEY.getValue(), paramMap);
+            paramMap.put(PAYLOAD_PARAMETERS.CHECKSUM_HASH.getValue(), checkSum);
 
-            System.out.println("Paytm Payload: "+ paramMap);
+            log.info("Paytm Payload: " + paramMap);
 
         }catch(Exception e) {
             // TODO Auto-generated catch block
@@ -55,31 +67,19 @@ public class PaytmGatewayManager implements GatewayManager
         return checkSum;
     }
 
-    public boolean validateChecksum(final Map<String, String> transactionResponseParams)
+    private boolean validateChecksum(final TransactionResponseParams transactionResponseParams)
     {
-        System.out.println(transactionResponseParams);
-        String paytmChecksum = "";
-
-        Map<String, String> mapData = new  TreeMap<>(transactionResponseParams);
-
-        TreeMap<String, String> paytmParams = new  TreeMap<>();
-
-        for (Map.Entry<String, String> entry : mapData.entrySet())
-        {
-            if(entry.getKey().equals("CHECKSUMHASH")){
-                paytmChecksum = entry.getKey();
-            }
-            else{
-                paytmParams.put(entry.getKey(), entry.getValue());
-            }
-        }
-
         boolean isValideChecksum = false;
         try{
 
-            isValideChecksum = CheckSumServiceHelper.getCheckSumServiceHelper().verifycheckSum(MercahntKey, paytmParams, paytmChecksum);
-            System.out.println(paytmParams);
-            System.out.println(isValideChecksum);
+            isValideChecksum =
+                    CheckSumServiceHelper.getCheckSumServiceHelper()
+                                         .verifycheckSum(MERCHANT_CONSTS.MERCHANT_KEY.getValue(),
+                                                         transactionResponseParams.getResponseAsMap(),
+                                                         transactionResponseParams.getChecksumHash());
+
+            log.info("Paytm response params: " + transactionResponseParams +
+                            " isValidCheckSum: " + isValideChecksum);
 
             // if checksum is validated Kindly verify the amount and status
             // if transaction is successful
@@ -90,6 +90,25 @@ public class PaytmGatewayManager implements GatewayManager
         }catch(Exception e){
             e.printStackTrace();
         }
+
         return isValideChecksum;
+    }
+
+    private String upsertPaytmResponse(TransactionResponseParams responseParams)
+    {
+        Map<String, Object> params = new HashMap<>();
+        params.put("transactionResponseParams", responseParams);
+        responseMapper.upsertTxnResponse(params);
+        return params.get("txnId").toString();
+    }
+
+    public String insertPaytmResponse(TransactionResponseParams responseParams)
+    {
+        return upsertPaytmResponse(responseParams);
+    }
+
+    public String updatePaytmResponse(TransactionResponseParams responseParams)
+    {
+        return upsertPaytmResponse(responseParams);
     }
 }
