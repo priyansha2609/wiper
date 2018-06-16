@@ -10,14 +10,14 @@ import app.wiper.domain.gateway.paytm.PaytmConstants.MERCHANT_CONSTS;
 import com.paytm.pg.merchant.CheckSumServiceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 @Service
-@Log4j
+@Log4j2
 public class PaytmGatewayManager implements GatewayManager
 {
     @Autowired
@@ -32,7 +32,11 @@ public class PaytmGatewayManager implements GatewayManager
     public boolean validateAndPersistResponse(final TransactionResponseParams responseParams)
     {
         boolean isValidResponse = validateChecksum(responseParams);
-        upsertPaytmResponse(responseParams);
+        if (isValidResponse) {
+            upsertPaytmResponse(responseParams);
+            log.info("Validated response and updated in DB");
+        }
+
         return isValidResponse;
     }
 

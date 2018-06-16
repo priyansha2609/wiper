@@ -4,7 +4,7 @@ import app.wiper.domain.gateway.paytm.PaytmConstants;
 import app.wiper.domain.gateway.paytm.TransactionRequestParams;
 import app.wiper.domain.gateway.paytm.TransactionResponseParams;
 import app.wiper.service.gateway.paytm.PaytmGatewayManager;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@Log4j
+@Log4j2
 public class PaytmChecksumController
 {
 
@@ -41,8 +41,10 @@ public class PaytmChecksumController
     {
         log.info("PAYTM RESPONSE "+ transactionResponseParams.getOrderId());
 
-        paytmGatewayManager.validateAndPersistResponse(transactionResponseParams);
+        boolean isValidResponse =
+                paytmGatewayManager.validateAndPersistResponse(transactionResponseParams);
 
-        return "Received response from Paytm: " + transactionResponseParams;
+        return "Transaction " + (isValidResponse ? "successful: " : "failed: ")
+                + transactionResponseParams;
     }
 }
