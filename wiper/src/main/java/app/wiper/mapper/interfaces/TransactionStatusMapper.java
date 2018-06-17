@@ -1,10 +1,9 @@
 package app.wiper.mapper.interfaces;
 
 import app.wiper.domain.type.TransactionStatus;
-
-import java.util.List;
+import app.wiper.util.Constants.TRANSACTION_STATUS;
 
 public interface TransactionStatusMapper
 {
-    TransactionStatus getTransactionStatusById(Integer transactionStatusId);
+    TransactionStatus getTransactionStatusById(TRANSACTION_STATUS transaction_status);
 }

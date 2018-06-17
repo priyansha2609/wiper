@@ -20,12 +20,12 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <AsyncLogger name="app.wiper" level="info" additivity="false">
+        <AsyncLogger name="app.wiper" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="FileAppender" />
         </AsyncLogger>
 
-        <Root level="info" additivity="false">
+        <Root level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="FileAppender" />
         </Root>

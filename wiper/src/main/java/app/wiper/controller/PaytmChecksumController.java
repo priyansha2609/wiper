@@ -3,6 +3,7 @@ package app.wiper.controller;
 import app.wiper.domain.gateway.paytm.PaytmConstants;
 import app.wiper.domain.gateway.paytm.TransactionRequestParams;
 import app.wiper.domain.gateway.paytm.TransactionResponseParams;
+import app.wiper.service.PaymentService;
 import app.wiper.service.gateway.paytm.PaytmGatewayManager;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +22,9 @@ public class PaytmChecksumController
 {
     @Autowired
     private PaytmGatewayManager paytmGatewayManager;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @RequestMapping(method=RequestMethod.POST, value="/getPaytmChecksum")
     public Map<String, String> getPaytmChecksum(@RequestBody TransactionRequestParams transactionRequestParams)
@@ -43,9 +46,11 @@ public class PaytmChecksumController
         boolean isValidResponse =
                 paytmGatewayManager.validateAndPersistResponse(transactionResponseParams);
 
-        String paytmResponse = "Transaction " + (isValidResponse ? "successful: " : "failed: ")
-                + transactionResponseParams;
+        paymentService.processPaymentResponse(0,
+                Integer.valueOf(transactionResponseParams.getOrderId()),
+                isValidResponse);
 
-        return paytmResponse;
+        return "Transaction " + (isValidResponse ? "successful: " : "failed: ")
+                + transactionResponseParams;
     }
 }
