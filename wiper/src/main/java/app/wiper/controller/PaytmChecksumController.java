@@ -20,7 +20,6 @@ import java.util.Map;
 @Log4j2
 public class PaytmChecksumController
 {
-
     @Autowired
     private PaytmGatewayManager paytmGatewayManager;
 
@@ -44,7 +43,9 @@ public class PaytmChecksumController
         boolean isValidResponse =
                 paytmGatewayManager.validateAndPersistResponse(transactionResponseParams);
 
-        return "Transaction " + (isValidResponse ? "successful: " : "failed: ")
+        String paytmResponse = "Transaction " + (isValidResponse ? "successful: " : "failed: ")
                 + transactionResponseParams;
+
+        return paytmResponse;
     }
 }
