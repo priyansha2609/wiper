@@ -4,8 +4,6 @@ import java.util.List;
 
 import app.wiper.domain.core.Rate;
 import app.wiper.domain.type.ServiceType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +17,8 @@ import app.wiper.service.MetaDataService;
 
 @RestController
 public class MetadataController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(MetadataController.class);
+//
+//	private static final Logger logger = LogManager.getLogger(MetadataController.class);
 	
 	@Autowired
 	private MetaDataService metaDataService;

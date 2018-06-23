@@ -2,7 +2,7 @@ package app.wiper.domain.core;
 
 import java.util.Date;
 
-import app.wiper.domain.type.TransactionStatus;
+import app.wiper.util.Constants.TRANSACTION_STATUS;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,5 +17,6 @@ public class Payment {
 	Float taxPercent;
 	Integer modeOfPayment;
 	String comment;
-    TransactionStatus transactionStatus;
+//    TRANSACTION_STATUS transactionStatus;
+	Integer transactionStatus;
 }

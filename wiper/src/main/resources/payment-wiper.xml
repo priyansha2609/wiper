@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.PaymentMapper">
+
+    <resultMap id="payment" type="app.wiper.domain.core.Payment">
+        <result property="paymentId" column="payment_id" jdbcType="INTEGER" />
+        <result property="customerId" column="customer_id" jdbcType="INTEGER" />
+        <result property="dateOfPayment" column="date_of_payment" jdbcType="TIMESTAMP" />
+        <result property="amountOfPayment" column="amount_of_payment" jdbcType="INTEGER" />
+        <result property="basicCharge" column="basic_charge" jdbcType="INTEGER" />
+        <result property="taxPercent" column="tax_percent" jdbcType="FLOAT" />
+        <result property="modeOfPayment" column="mode_of_payment" jdbcType="INTEGER" />
+        <result property="comment" column="comment" jdbcType="VARCHAR" />
+        <result property="transactionStatus" column="transaction_status_id" jdbcType="INTEGER" />
+        <!--<association property="transactionStatus" column="transaction_status_id"-->
+                     <!--typeHandler="app.wiper.util.Constants.TRANSACTION_STATUS"-->
+                     <!--select="app.wiper.util.Constants.TRANSACTION_STATUS.getTransactionStatusById" />-->
+    </resultMap>
+
+    <select id="getPaymentById" resultMap="payment">
+        select * from payment where payment_id = #{paymentId}
+    </select>
+    <select id="getPaymentFromServiceDetailId" resultMap="payment">
+        select * from payment where payment_id in (select payment_id from service_payment_rel where service_detail_id = #{serviceDetailId})
+    </select>
+
+    <insert id="upsertPayment" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="paymentId" >
+        INSERT INTO payment
+        (
+        payment_id,
+        customer_id,
+        date_of_payment,
+        amount_of_payment,
+        basic_charge,
+        tax_percent,
+        mode_of_payment,
+        transaction_status_id,
+        comment
+        )
+        VALUES
+        (
+        #{payment.paymentId},
+        #{payment.customerId},
+        #{payment.dateOfPayment},
+        #{payment.amountOfPayment},
+        #{payment.basicCharge},
+        #{payment.taxPercent},
+        #{payment.modeOfPayment},
+        #{payment.transactionStatus},
+        #{payment.comment}
+        )
+        ON DUPLICATE KEY
+        UPDATE payment_id = IF(#{payment.paymentId} IS NOT NULL, #{payment.paymentId}, payment_id),
+        customer_id = IF(#{payment.customerId} IS NOT NULL, #{payment.customerId}, customer_id),
+        date_of_payment = IF(#{payment.dateOfPayment} IS NOT NULL, #{payment.dateOfPayment}, date_of_payment),
+        amount_of_payment = IF(#{payment.amountOfPayment} IS NOT NULL, #{payment.amountOfPayment}, amount_of_payment),
+        basic_charge = IF(#{payment.basicCharge} IS NOT NULL, #{payment.basicCharge}, basic_charge),
+        tax_percent = IF(#{payment.taxPercent} IS NOT NULL, #{payment.taxPercent}, tax_percent),
+        mode_of_payment = IF(#{payment.modeOfPayment} IS NOT NULL, #{payment.modeOfPayment}, mode_of_payment),
+        transaction_status_id = IF(#{payment.transactionStatus} IS NOT NULL, #{payment.transactionStatus}, transaction_status_id),
+        comment = IF(#{payment.comment} IS NOT NULL, #{payment.comment}, comment);
+        <selectKey keyProperty="paymentId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="payment.paymentId != null">
+                    select #{payment.paymentId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as paymentId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
+</mapper>

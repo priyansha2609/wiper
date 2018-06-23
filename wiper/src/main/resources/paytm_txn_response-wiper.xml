@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.PaytmTxnResponseMapper">
+    <resultMap id="transactionResponseParams" type="app.wiper.domain.gateway.paytm.TransactionResponseParams">
+        <result property="orderId" column="order_id" jdbcType="VARCHAR" />
+        <result property="txnAmount" column="txn_amount" jdbcType="FLOAT" />
+        <result property="currency" column="currency" jdbcType="VARCHAR" />
+        <result property="txnId" column="txn_id" jdbcType="VARCHAR" />
+        <result property="bankTxnId" column="bank_txn_id" jdbcType="VARCHAR" />
+        <result property="status" column="status" jdbcType="VARCHAR" />
+        <result property="responseCode" column="response_code" jdbcType="VARCHAR" />
+        <result property="responseMessage" column="response_msg" jdbcType="VARCHAR" />
+        <result property="txnDate" column="txn_date" jdbcType="TIMESTAMP" />
+        <result property="gatewayName" column="gateway_name" jdbcType="VARCHAR" />
+        <result property="bankName" column="bank_name" jdbcType="VARCHAR" />
+        <result property="paymentMode" column="payment_mode" jdbcType="VARCHAR" />
+        <result property="checksumHash" column="checksum" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getTxnResponseForTxnId" resultMap="transactionResponseParams">
+        select * from paytm_txn_response where txn_id = #{txnId}
+    </select>
+    <select id="getAllTxnsResponseForOrderId" resultMap="transactionResponseParams">
+        select * from paytm_txn_response where order_id = #{orderId}
+    </select>
+
+    <insert id="upsertTxnResponse" parameterType="java.util.HashMap" keyProperty="txnId" >
+        INSERT INTO paytm_txn_response
+        (
+        order_id,
+        txn_amount,
+        currency,
+        txn_id,
+        bank_txn_id,
+        status,
+        response_code,
+        response_msg,
+        txn_date,
+        gateway_name,
+        bank_name,
+        payment_mode,
+        checksum
+        )
+        VALUES
+        (
+        #{transactionResponseParams.orderId},
+        #{transactionResponseParams.txnAmount},
+        #{transactionResponseParams.currency},
+        #{transactionResponseParams.txnId},
+        #{transactionResponseParams.bankTxnId},
+        #{transactionResponseParams.status},
+        #{transactionResponseParams.responseCode},
+        #{transactionResponseParams.responseMessage},
+        #{transactionResponseParams.txnDate},
+        #{transactionResponseParams.gatewayName},
+        #{transactionResponseParams.bankName},
+        #{transactionResponseParams.paymentMode},
+        #{transactionResponseParams.checksumHash}
+        )
+        ON DUPLICATE KEY
+        UPDATE order_id = IF(#{transactionResponseParams.orderId} IS NOT NULL, #{transactionResponseParams.orderId}, order_id),
+        txn_amount =  IF(#{transactionResponseParams.txnAmount} IS NOT NULL, #{transactionResponseParams.txnAmount}, txn_amount),
+        currency = IF(#{transactionResponseParams.currency} IS NOT NULL, #{transactionResponseParams.currency}, currency),
+        txn_id = IF(#{transactionResponseParams.txnId} IS NOT NULL, #{transactionResponseParams.txnId}, txn_id),
+        bank_txn_id = IF(#{transactionResponseParams.bankTxnId} IS NOT NULL, #{transactionResponseParams.bankTxnId}, bank_txn_id),
+        status = IF(#{transactionResponseParams.status} IS NOT NULL, #{transactionResponseParams.status}, status),
+        response_code = IF(#{transactionResponseParams.responseCode} IS NOT NULL, #{transactionResponseParams.responseCode}, response_code),
+        response_msg = IF(#{transactionResponseParams.responseMessage} IS NOT NULL, #{transactionResponseParams.responseMessage}, response_msg),
+        txn_date = IF(#{transactionResponseParams.txnDate} IS NOT NULL, #{transactionResponseParams.txnDate}, txn_date),
+        gateway_name = IF(#{transactionResponseParams.gatewayName} IS NOT NULL, #{transactionResponseParams.gatewayName}, gateway_name),
+        bank_name = IF(#{transactionResponseParams.bankName} IS NOT NULL, #{transactionResponseParams.bankName}, bank_name),
+        payment_mode = IF(#{transactionResponseParams.paymentMode} IS NOT NULL, #{transactionResponseParams.paymentMode}, payment_mode),
+        checksum = IF(#{transactionResponseParams.checksumHash} IS NOT NULL, #{transactionResponseParams.checksumHash}, checksum);
+        <selectKey keyProperty="txnId" resultType="String" order="AFTER">
+            <choose>
+                <when test="transactionResponseParams.txnId != null">
+                    select #{transactionResponseParams.txnId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as transactionResponseParams;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
+</mapper>
