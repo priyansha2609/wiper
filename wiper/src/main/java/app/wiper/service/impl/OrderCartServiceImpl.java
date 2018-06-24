@@ -38,6 +38,8 @@ public class OrderCartServiceImpl implements OrderCartService
 
         Integer paymentId = paymentService.insertPayment(payment);
 
+        payment.setPaymentId(paymentId);
+
         // Currently we mark all the subscriptions as inactive. They should be
         // marked active once the related transaction has been processed
         // successfully.

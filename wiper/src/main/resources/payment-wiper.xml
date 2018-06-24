@@ -4,13 +4,12 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="app.wiper.mapper.interfaces.PaymentMapper">
-
     <resultMap id="payment" type="app.wiper.domain.core.Payment">
         <result property="paymentId" column="payment_id" jdbcType="INTEGER" />
         <result property="customerId" column="customer_id" jdbcType="INTEGER" />
         <result property="dateOfPayment" column="date_of_payment" jdbcType="TIMESTAMP" />
-        <result property="amountOfPayment" column="amount_of_payment" jdbcType="INTEGER" />
-        <result property="basicCharge" column="basic_charge" jdbcType="INTEGER" />
+        <result property="amountOfPayment" column="amount_of_payment" jdbcType="FLOAT" />
+        <result property="basicCharge" column="basic_charge" jdbcType="FLOAT" />
         <result property="taxPercent" column="tax_percent" jdbcType="FLOAT" />
         <result property="modeOfPayment" column="mode_of_payment" jdbcType="INTEGER" />
         <result property="comment" column="comment" jdbcType="VARCHAR" />
@@ -22,9 +21,6 @@
 
     <select id="getPaymentById" resultMap="payment">
         select * from payment where payment_id = #{paymentId}
-    </select>
-    <select id="getPaymentFromServiceDetailId" resultMap="payment">
-        select * from payment where payment_id in (select payment_id from service_payment_rel where service_detail_id = #{serviceDetailId})
     </select>
 
     <insert id="upsertPayment" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="paymentId" >

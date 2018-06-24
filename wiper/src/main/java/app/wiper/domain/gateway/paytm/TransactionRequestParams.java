@@ -9,7 +9,7 @@ public class TransactionRequestParams
 {
     private String orderId;
     private String custId;
-    private double txnAmount;
+    private Double txnAmount;
     private String email;
     private String mobile;
 }
