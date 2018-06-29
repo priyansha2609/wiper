@@ -22,6 +22,9 @@
     <select id="getPaymentById" resultMap="payment">
         select * from payment where payment_id = #{paymentId}
     </select>
+    <select id="getPaymentsByCustomerId" resultMap="payment">
+        select * from payment where customer_id = #{customerId}
+    </select>
 
     <insert id="upsertPayment" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="paymentId" >
         INSERT INTO payment

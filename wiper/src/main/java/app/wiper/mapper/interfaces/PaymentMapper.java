@@ -9,4 +9,5 @@ public interface PaymentMapper
 {
     Payment getPaymentById(Integer paymentId);
     Integer upsertPayment(Map<String, Object> params);
+    List<Payment> getPaymentsByCustomerId(Integer customerId);
 }

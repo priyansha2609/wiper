@@ -8,7 +8,6 @@ import app.wiper.service.CustomerService;
 import app.wiper.service.PaymentService;
 import app.wiper.service.ServiceDetailsService;
 import app.wiper.service.mail.MailClient;
-import app.wiper.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,6 +99,12 @@ public class PaymentServiceImpl implements PaymentService
         }
 
         notifyCustomer(payment, isValidResponse);
+    }
+
+    @Override
+    public List<Payment> getPaymentsByCustomerId(Integer customerId)
+    {
+        return paymentMapper.getPaymentsByCustomerId(customerId);
     }
 
     private void notifyCustomer(Payment payment, boolean isValidTransaction)
