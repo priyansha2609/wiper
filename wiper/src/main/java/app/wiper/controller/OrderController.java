@@ -20,9 +20,9 @@ public class OrderController
     private OrderCartService orderCartService;
 
     @RequestMapping("/getOrderById")
-    public Order getOrderById(@RequestParam Integer orderId)
+    public OrderCart getOrderById(@RequestParam Integer orderId)
     {
-        return orderService.getOrderById(orderId);
+        return orderCartService.getOrderByOrderId(orderId);
     }
 
     @RequestMapping("/getServiceDetailsForOrderId")

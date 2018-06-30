@@ -68,4 +68,11 @@ public class OrderCartServiceImpl implements OrderCartService
                 .map(this::createNewOrderCart)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public OrderCart getOrderByOrderId(Integer orderId)
+    {
+        Order order = orderService.getOrderById(orderId);
+        return createNewOrderCart(order);
+    }
 }
