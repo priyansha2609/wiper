@@ -14,8 +14,8 @@
         <result property="bufferDaysAvailed" column="buffer_days_availed" jdbcType="INTEGER" />
         <association property="service" column="service_type_id" javaType="app.wiper.domain.type.ServiceType"
                      select="app.wiper.mapper.interfaces.ServiceTypeMapper.getServiceTypeById" />
-        <association property="payment" column="payment_id" javaType="app.wiper.domain.core.Payment"
-                     select="app.wiper.mapper.interfaces.PaymentMapper.getPaymentById" />
+        <association property="order" column="order_id" javaType="app.wiper.domain.core.Order"
+                     select="app.wiper.mapper.interfaces.OrderMapper.getOrderById" />
     </resultMap>
 
     <select id="getServiceDetailsForVehicle" resultMap="serviceDetails">
@@ -25,8 +25,8 @@
     <select id="getServiceDetailsById" resultMap="serviceDetails">
         select * from service_details where service_detail_id = #{serviceDetailsId}
     </select>
-    <select id="getServiceDetailsForPaymentId" resultMap="serviceDetails">
-        select * from service_details where payment_id = #{payment.paymentId}
+    <select id="getServiceDetailsForOrderId" resultMap="serviceDetails">
+        select * from service_details where order_id = #{order.orderId}
     </select>
 
     <insert id="upsertServiceDetails" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="serviceDetailId" >
@@ -39,7 +39,7 @@
         subscription_end_date,
         buffer_days_availed,
         is_active,
-        payment_id
+        order_id
         )
         VALUES
         (
@@ -50,7 +50,7 @@
         #{serviceDetails.subscriptionEndDate},
         #{serviceDetails.bufferDaysAvailed},
         #{serviceDetails.isActive},
-        #{serviceDetails.payment.paymentId}
+        #{serviceDetails.order.orderId}
         )
         ON DUPLICATE KEY
         UPDATE vehicle_id = IF(#{serviceDetails.vehicleId} IS NOT NULL, #{serviceDetails.vehicleId}, vehicle_id),
@@ -59,7 +59,7 @@
         subscription_end_date = IF(#{serviceDetails.subscriptionEndDate} IS NOT NULL, #{serviceDetails.subscriptionEndDate}, subscription_end_date),
         buffer_days_availed = IF(#{serviceDetails.bufferDaysAvailed} IS NOT NULL, #{serviceDetails.bufferDaysAvailed}, buffer_days_availed),
         is_active = IF(#{serviceDetails.isActive} IS NOT NULL, #{serviceDetails.isActive}, is_active),
-        payment_id = IF(#{serviceDetails.payment.paymentId} IS NOT NULL, #{serviceDetails.payment.paymentId}, payment_id);
+        order_id = IF(#{serviceDetails.order.orderId} IS NOT NULL, #{serviceDetails.order.orderId}, order_id);
         <selectKey keyProperty="serviceDetailId" resultType="Integer" order="AFTER">
             <choose>
                 <when test="serviceDetails.serviceDetailId != null">

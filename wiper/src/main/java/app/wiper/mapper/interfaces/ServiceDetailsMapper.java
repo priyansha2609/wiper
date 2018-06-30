@@ -8,6 +8,6 @@ import java.util.Map;
 public interface ServiceDetailsMapper {
     List<ServiceDetails> getServiceDetailsForVehicle(Integer vehicleId);
     ServiceDetails getServiceDetailsById(Integer serviceDetailsId);
-    List<ServiceDetails> getServiceDetailsForPaymentId(Integer paymentId);
+    List<ServiceDetails> getServiceDetailsForOrderId(Integer orderId);
     Integer upsertServiceDetails(Map<String, Object> params);
 }
