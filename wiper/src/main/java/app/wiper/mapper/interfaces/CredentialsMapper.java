@@ -2,8 +2,11 @@ package app.wiper.mapper.interfaces;
 
 import app.wiper.domain.core.Credentials;
 
-public interface CredentialsMapper {
-	
-	Credentials getCredentialsForEntityIdAndEntityTypeId(Integer entity_type_id, Integer  entity_id);
+import java.util.Map;
 
+public interface CredentialsMapper
+{
+    Integer getCredentialsByEmailId(String emailId);
+    Credentials getCredentialsForEntityIdAndEntityTypeId(Integer entityTypeId, Integer  entityId);
+    void upsertCredentials(Map<String, Object> params);
 }
