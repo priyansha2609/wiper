@@ -10,7 +10,11 @@
         <result property="name" column="name" jdbcType="VARCHAR" />
         <result property="description" column="description" jdbcType="VARCHAR" />
         <result property="orderId" column="order_id" jdbcType="INTEGER" />
+        <!--<result property="subscriptionType" column="subscription_type_id"-->
+                <!--javaType="app.wiper.util.Constants$SUBSCRIPTION_TYPE"-->
+                <!--jdbcType="INTEGER" />-->
         <result property="isActive" column="is_active" jdbcType="BIT" />
+        <result property="subscriptionType" column="subscription_type_id" jdbcType="INTEGER" />
     </resultMap>
 
     <select id="getAllServiceTypes" resultMap="serviceType">
@@ -28,7 +32,8 @@
         name,
         description,
         order_id,
-        is_active
+        is_active,
+        subscription_type_id
         )
         VALUES
         (
@@ -36,13 +41,15 @@
         #{serviceType.name},
         #{serviceType.description},
         #{serviceType.orderId},
-        #{serviceType.isActive}
+        #{serviceType.isActive},
+        #{serviceType.subscriptionType}
         )
         ON DUPLICATE KEY
         UPDATE name = IF(#{serviceType.name} IS NOT NULL, #{serviceType.name}, name),
         description =  IF(#{serviceType.description} IS NOT NULL, #{serviceType.description}, description),
         order_id = IF(#{serviceType.orderId} IS NOT NULL, #{serviceType.orderId}, order_id),
-        is_active = IF(#{serviceType.isActive} IS NOT NULL, #{serviceType.isActive}, is_active);
+        is_active = IF(#{serviceType.isActive} IS NOT NULL, #{serviceType.isActive}, is_active),
+        subscription_type_id = IF(#{serviceType.subscriptionType} IS NOT NULL, #{serviceType.subscriptionType}, subscription_type_id);
         <selectKey keyProperty="serviceTypeId" resultType="Integer" order="AFTER">
             <choose>
                 <when test="serviceType.serviceTypeId != null">

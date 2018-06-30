@@ -12,9 +12,9 @@ public class Payment {
 	Integer paymentId;
 	Integer customerId;
 	Date dateOfPayment;
-	Integer amountOfPayment;
-	Integer basicCharge;
-	Float taxPercent;
+	Double amountOfPayment;
+	Double basicCharge;
+	Double taxPercent;
 	Integer modeOfPayment;
 	String comment;
 //    TRANSACTION_STATUS transactionStatus;

@@ -29,4 +29,28 @@ public class Constants
                     .get();
         }
     }
+
+    @Getter
+    public enum SUBSCRIPTION_TYPE
+    {
+        DAILY,
+        WEEKLY,
+        MONTHLY,
+        QUARTERLY,
+        ANNUALLY;
+
+//        private Integer subscriptionTypeId;
+//        SUBSCRIPTION_TYPE(Integer id)
+//        {
+//            subscriptionTypeId = id;
+//        }
+//
+//        public SUBSCRIPTION_TYPE getSubscriptionTypeById(Integer id)
+//        {
+//            return Arrays.stream(SUBSCRIPTION_TYPE.values())
+//                    .filter(v -> v.subscriptionTypeId.equals(id))
+//                    .findFirst()
+//                    .get();
+//        }
+    }
 }

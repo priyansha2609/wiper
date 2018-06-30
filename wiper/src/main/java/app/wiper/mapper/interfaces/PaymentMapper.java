@@ -8,6 +8,6 @@ import java.util.Map;
 public interface PaymentMapper
 {
     Payment getPaymentById(Integer paymentId);
-    List<Payment> getPaymentFromServiceDetailId(Integer serviceDetailId);
     Integer upsertPayment(Map<String, Object> params);
+    List<Payment> getPaymentsByCustomerId(Integer customerId);
 }

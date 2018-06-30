@@ -16,4 +16,5 @@ public interface PaymentService
     void processPaymentResponse(Integer paymentMode,
                                 Integer paymentId,
                                 boolean isValidResponse);
+    List<Payment> getPaymentsByCustomerId(Integer customerId);
 }

@@ -19,13 +19,14 @@
     </resultMap>
 
     <select id="getServiceDetailsForVehicle" resultMap="serviceDetails">
-        select * from service_details where vehicle_id = #{vehicleId}
+        select * from service_details where vehicle_id = #{vehicleId} and is_active = 1;
     </select>
+
     <select id="getServiceDetailsById" resultMap="serviceDetails">
         select * from service_details where service_detail_id = #{serviceDetailsId}
     </select>
     <select id="getServiceDetailsForPaymentId" resultMap="serviceDetails">
-        select * from service_details where payment_id = #{payment.paymentId})
+        select * from service_details where payment_id = #{payment.paymentId}
     </select>
 
     <insert id="upsertServiceDetails" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="serviceDetailId" >

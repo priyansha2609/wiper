@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @Log4j2
-public class PaytmChecksumController
+public class PaytmController
 {
     @Autowired
     private PaytmGatewayManager paytmGatewayManager;
