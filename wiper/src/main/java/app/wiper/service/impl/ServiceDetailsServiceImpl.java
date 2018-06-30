@@ -29,9 +29,9 @@ public class ServiceDetailsServiceImpl implements ServiceDetailsService
     }
 
     @Override
-    public List<ServiceDetails> getServiceDetailsForPaymentId(Integer paymentId)
+    public List<ServiceDetails> getServiceDetailsForOrderId(Integer orderId)
     {
-        return serviceDetailsMapper.getServiceDetailsForPaymentId(paymentId);
+        return serviceDetailsMapper.getServiceDetailsForOrderId(orderId);
     }
 
     private Integer upsertServiceDetails(ServiceDetails serviceDetails)

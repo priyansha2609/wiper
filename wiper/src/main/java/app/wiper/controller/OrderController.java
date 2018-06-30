@@ -1,34 +1,34 @@
 package app.wiper.controller;
 
+import app.wiper.domain.core.Order;
 import app.wiper.domain.core.OrderCart;
-import app.wiper.domain.core.Payment;
 import app.wiper.domain.core.ServiceDetails;
 import app.wiper.service.OrderCartService;
-import app.wiper.service.PaymentService;
+import app.wiper.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-public class PaymentController
+public class OrderController
 {
     @Autowired
-    private PaymentService paymentService;
+    private OrderService orderService;
 
     @Autowired
     private OrderCartService orderCartService;
 
-    @RequestMapping("/getPaymentById")
-    public Payment getPaymentById(@RequestParam Integer paymentId)
+    @RequestMapping("/getOrderById")
+    public Order getOrderById(@RequestParam Integer orderId)
     {
-        return paymentService.getPaymentById(paymentId);
+        return orderService.getOrderById(orderId);
     }
 
-    @RequestMapping("/getServiceDetailsForPaymentId")
-    public List<ServiceDetails> getServiceDetailsForPaymentId(@RequestParam Integer paymentId)
+    @RequestMapping("/getServiceDetailsForOrderId")
+    public List<ServiceDetails> getServiceDetailsForOrderId(@RequestParam Integer orderId)
     {
-        return paymentService.getServiceDetailsForPaymentId(paymentId);
+        return orderService.getServiceDetailsForOrderId(orderId);
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/createOrder")

@@ -8,8 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Payment {
-	Integer paymentId;
+public class Order {
+	Integer orderId;
 	Integer customerId;
 	Date dateOfPayment;
 	Double amountOfPayment;

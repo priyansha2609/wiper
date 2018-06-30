@@ -17,5 +17,5 @@ public class ServiceDetails {
 	Float amountPaid;
 	Integer bufferDaysAvailed;
 	Boolean isActive;
-	Payment payment;
+	Order order;
 }

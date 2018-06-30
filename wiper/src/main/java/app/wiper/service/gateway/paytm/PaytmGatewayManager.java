@@ -1,6 +1,6 @@
 package app.wiper.service.gateway.paytm;
 
-import app.wiper.domain.core.Payment;
+import app.wiper.domain.core.Order;
 import app.wiper.domain.gateway.paytm.TransactionRequestParams;
 import app.wiper.domain.gateway.paytm.TransactionResponseParams;
 import app.wiper.mapper.interfaces.PaytmTxnResponseMapper;
@@ -24,7 +24,7 @@ public class PaytmGatewayManager implements GatewayManager
     private PaytmTxnResponseMapper responseMapper;
 
     @Override
-    public void makePayment(Payment payment)
+    public void makePayment(Order order)
     {
 
     }

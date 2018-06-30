@@ -10,11 +10,14 @@ import java.util.List;
 public class OrderCart
 {
     List<ServiceDetails> serviceDetails;
-    Payment payment;
+    Order order;
 
-    public OrderCart(Payment payment, List<ServiceDetails> serviceDetails)
+    public OrderCart()
+    {}
+
+    public OrderCart(Order order, List<ServiceDetails> serviceDetails)
     {
-        this.payment = payment;
+        this.order = order;
         this.serviceDetails = serviceDetails;
     }
 }

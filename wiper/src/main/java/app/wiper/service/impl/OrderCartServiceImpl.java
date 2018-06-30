@@ -1,17 +1,15 @@
 package app.wiper.service.impl;
 
+import app.wiper.domain.core.Order;
 import app.wiper.domain.core.OrderCart;
-import app.wiper.domain.core.Payment;
 import app.wiper.domain.core.ServiceDetails;
 import app.wiper.service.OrderCartService;
-import app.wiper.service.PaymentService;
+import app.wiper.service.OrderService;
 import app.wiper.service.ServiceDetailsService;
-import app.wiper.util.Constants.TRANSACTION_STATUS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,46 +21,51 @@ public class OrderCartServiceImpl implements OrderCartService
     private ServiceDetailsService serviceDetailsService;
 
     @Autowired
-    private PaymentService paymentService;
+    private OrderService orderService;
 
     @Override
     public Integer processOrderCart(OrderCart orderCart)
     {
         List<ServiceDetails> serviceDetails = orderCart.getServiceDetails();
 
-        Payment payment = orderCart.getPayment();
-        payment.setDateOfPayment(Date.from(Instant.now()));
+        Order order = orderCart.getOrder();
+        order.setDateOfPayment(Date.from(Instant.now()));
 
         // We mark the status as pending as the transaction is yet to complete.
-        // Once the transaction is completed the status in the payment object
+        // Once the transaction is completed the status in the order object
         // must be updated to reflect the correct status.
-        payment.setTransactionStatus(2);
+        order.setTransactionStatus(2);
 
-        Integer paymentId = paymentService.insertPayment(payment);
+        Integer orderId = orderService.insertOrder(order);
 
-        payment.setPaymentId(paymentId);
+        order.setOrderId(orderId);
 
         // Currently we mark all the subscriptions as inactive. They should be
         // marked active once the related transaction has been processed
         // successfully.
         serviceDetails.forEach(sd -> sd.setIsActive(false));
-        serviceDetails.forEach(sd -> sd.setPayment(payment));
+        serviceDetails.forEach(sd -> sd.setOrder(order));
         serviceDetails.forEach(sd -> serviceDetailsService.insertServiceDetails(sd));
 
-        return paymentId;
+        return orderId;
+    }
+
+    private OrderCart createNewOrderCart(Order order)
+    {
+        return new OrderCart(
+                order,
+                serviceDetailsService.getServiceDetailsForOrderId(
+                    order.getOrderId()));
     }
 
     @Override
     public List<OrderCart> getAllOrdersForCustomer(Integer customerId)
     {
-        List<Payment> customerPayments =
-                paymentService.getPaymentsByCustomerId(customerId);
+        List<Order> customerOrders =
+                orderService.getOrdersByCustomerId(customerId);
 
-        return customerPayments.stream()
-                .map(payment ->
-                        new OrderCart(payment,
-                                serviceDetailsService.getServiceDetailsForPaymentId(
-                                        payment.getPaymentId())))
+        return customerOrders.stream()
+                .map(this::createNewOrderCart)
                 .collect(Collectors.toList());
     }
 }

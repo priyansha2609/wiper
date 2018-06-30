@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.OrderMapper">
+    <resultMap id="order" type="app.wiper.domain.core.Order">
+        <result property="orderId" column="order_id" jdbcType="INTEGER" />
+        <result property="customerId" column="customer_id" jdbcType="INTEGER" />
+        <result property="dateOfPayment" column="date_of_payment" jdbcType="TIMESTAMP" />
+        <result property="amountOfPayment" column="amount_of_payment" jdbcType="FLOAT" />
+        <result property="basicCharge" column="basic_charge" jdbcType="FLOAT" />
+        <result property="taxPercent" column="tax_percent" jdbcType="FLOAT" />
+        <result property="modeOfPayment" column="mode_of_payment" jdbcType="INTEGER" />
+        <result property="comment" column="comment" jdbcType="VARCHAR" />
+        <result property="transactionStatus" column="transaction_status_id" jdbcType="INTEGER" />
+        <!--<association property="transactionStatus" column="transaction_status_id"-->
+                     <!--typeHandler="app.wiper.util.Constants.TRANSACTION_STATUS"-->
+                     <!--select="app.wiper.util.Constants.TRANSACTION_STATUS.getTransactionStatusById" />-->
+    </resultMap>
+
+    <select id="getOrderById" resultMap="order">
+        select * from wiper.order where order_id = #{orderId}
+    </select>
+    <!--<select id="getOrderById" resultMap="order">-->
+        <!--select * from order where order_id = #{orderId}-->
+    <!--</select>-->
+    <select id="getOrdersByCustomerId" resultMap="order">
+        select * from wiper.order where customer_id = #{customerId}
+    </select>
+
+    <insert id="upsertOrder" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="orderId" >
+        INSERT INTO wiper.order
+        (
+        order_id,
+        customer_id,
+        date_of_payment,
+        amount_of_payment,
+        basic_charge,
+        tax_percent,
+        mode_of_payment,
+        transaction_status_id,
+        comment
+        )
+        VALUES
+        (
+        #{order.orderId},
+        #{order.customerId},
+        #{order.dateOfPayment},
+        #{order.amountOfPayment},
+        #{order.basicCharge},
+        #{order.taxPercent},
+        #{order.modeOfPayment},
+        #{order.transactionStatus},
+        #{order.comment}
+        )
+        ON DUPLICATE KEY
+        UPDATE customer_id = IF(#{order.customerId} IS NOT NULL, #{order.customerId}, customer_id),
+        date_of_payment = IF(#{order.dateOfPayment} IS NOT NULL, #{order.dateOfPayment}, date_of_payment),
+        amount_of_payment = IF(#{order.amountOfPayment} IS NOT NULL, #{order.amountOfPayment}, amount_of_payment),
+        basic_charge = IF(#{order.basicCharge} IS NOT NULL, #{order.basicCharge}, basic_charge),
+        tax_percent = IF(#{order.taxPercent} IS NOT NULL, #{order.taxPercent}, tax_percent),
+        mode_of_payment = IF(#{order.modeOfPayment} IS NOT NULL, #{order.modeOfPayment}, mode_of_payment),
+        transaction_status_id = IF(#{order.transactionStatus} IS NOT NULL, #{order.transactionStatus}, transaction_status_id),
+        comment = IF(#{order.comment} IS NOT NULL, #{order.comment}, comment);
+        <selectKey keyProperty="orderId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="order.orderId != null">
+                    select #{order.orderId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as orderId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
+</mapper>

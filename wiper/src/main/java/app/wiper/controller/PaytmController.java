@@ -3,7 +3,7 @@ package app.wiper.controller;
 import app.wiper.domain.gateway.paytm.PaytmConstants;
 import app.wiper.domain.gateway.paytm.TransactionRequestParams;
 import app.wiper.domain.gateway.paytm.TransactionResponseParams;
-import app.wiper.service.PaymentService;
+import app.wiper.service.OrderService;
 import app.wiper.service.gateway.paytm.PaytmGatewayManager;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class PaytmController
     private PaytmGatewayManager paytmGatewayManager;
 
     @Autowired
-    private PaymentService paymentService;
+    private OrderService orderService;
 
     @RequestMapping(method=RequestMethod.POST, value="/getPaytmChecksum")
     public Map<String, String> getPaytmChecksum(@RequestBody TransactionRequestParams transactionRequestParams)
@@ -46,7 +46,7 @@ public class PaytmController
         boolean isValidResponse =
                 paytmGatewayManager.validateAndPersistResponse(transactionResponseParams);
 
-        paymentService.processPaymentResponse(0,
+        orderService.processPaymentResponse(0,
                 Integer.valueOf(transactionResponseParams.getOrderId()),
                 isValidResponse);
 
