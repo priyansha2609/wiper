@@ -2,6 +2,7 @@ package app.wiper.domain.type;
 
 import java.io.Serializable;
 
+import app.wiper.util.Constants.TRANSACTION_STATUS;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class TransactionStatus implements Serializable
 {
-    Integer transactionStatusId;
+    TRANSACTION_STATUS status;
     String name;
     String description;
     Boolean isActive;

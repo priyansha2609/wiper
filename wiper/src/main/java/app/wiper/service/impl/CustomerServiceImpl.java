@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.wiper.domain.core.Credentials;
+import app.wiper.domain.type.EntityType;
 import app.wiper.mapper.interfaces.CredentialsMapper;
+import app.wiper.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	AddressMapper addressMapper;
+
+    @Autowired
+    MetaDataService metaDataService;
 
     @Autowired
     private CredentialsMapper credentialsMapper;
@@ -65,14 +70,25 @@ public class CustomerServiceImpl implements CustomerService {
         credentialsMapper.upsertCredentials(params);
     }
 
-	@Override
-	public void insertCustomer(Customer customer) {
-		Integer customerId = insertCustomerBasicData(customer);
-		customer.setCustomerId(customerId);
+    @Override
+    public void insertCustomer(Customer customer)
+    {
+        String emailId = customer.getCredentials().getEmailId();
+        Integer existingCustomerId = credentialsMapper.getCredentialsByEmailId(emailId);
+        if (existingCustomerId > 0) {
+            throw new IllegalArgumentException("Customer with email id '" + emailId
+                + "' already exists. Not updating customer details.");
+        }
+
+        Integer customerId = insertCustomerBasicData(customer);
+
+        if (customer.getEntityType() == null) {
+            customer.setEntityType(metaDataService.getEntityTypeById(1));
+        }
+        customer.setCustomerId(customerId);
 
         upsertCredentials(customer);
 
-		insertAddressForCustomer(customerId, customer.getCorrespondenceAddress());
-	}
-	
+        insertAddressForCustomer(customerId, customer.getCorrespondenceAddress());
+    }
 }

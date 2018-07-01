@@ -4,6 +4,8 @@ import java.util.List;
 
 import app.wiper.domain.core.Rate;
 import app.wiper.domain.type.ServiceType;
+import app.wiper.domain.type.TransactionStatus;
+import app.wiper.service.TransactionStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,12 +17,14 @@ import app.wiper.service.MetaDataService;
 
 @RestController
 public class MetadataController {
-//
-//	private static final Logger logger = LogManager.getLogger(MetadataController.class);
-	
+
 	@Autowired
 	private MetaDataService metaDataService;
-	
+
+
+    @Autowired
+    private TransactionStatusService transactionStatusService;
+
 	@RequestMapping("/getAllVehicleTypes")
 	public List<VehicleType> getAllVehicleTypes(){
 		return metaDataService.getAllVehicleTypes();
@@ -71,5 +75,10 @@ public class MetadataController {
 	public EntityType getEntityTypeById(@RequestParam("id") Integer id){
 		return metaDataService.getEntityTypeById(id);
 	}
-	
+
+    @RequestMapping("/getTransactionStatusById")
+    public TransactionStatus getTransactionStatusById(@RequestParam Integer transactionStatusId)
+    {
+        return transactionStatusService.getTransactionStatusById(transactionStatusId);
+    }
 }

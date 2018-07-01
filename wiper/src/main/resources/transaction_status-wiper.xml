@@ -6,17 +6,24 @@
 <mapper namespace="app.wiper.mapper.interfaces.TransactionStatusMapper">
 
     <resultMap id="transactionStatus" type="app.wiper.domain.type.TransactionStatus">
-        <result property="transactionStatusId" column="transaction_status_id" jdbcType="INTEGER" />
         <result property="name" column="name" jdbcType="VARCHAR" />
         <result property="description" column="description" jdbcType="VARCHAR" />
         <result property="orderId" column="order_id" jdbcType="INTEGER" />
         <result property="isActive" column="is_active" jdbcType="BIT" />
+        <result property="status" column="transaction_status_id"
+                typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+
     </resultMap>
+
     <select id="getAllTransactionStatuses" resultMap="transactionStatus">
         select * from transaction_status
     </select>
+
     <select id="getTransactionStatusById" resultMap="transactionStatus">
-        select * from transaction_status where transaction_status_id = #{transactionStatusId}
+        select * from wiper.transaction_status where transaction_status_id = #{transactionStatusId}
+    </select>
+    <select id="getTransactionStatus" resultMap="transactionStatus">
+        select * from wiper.transaction_status where transaction_status_id = #{transactionStatus.value}
     </select>
 
 </mapper>

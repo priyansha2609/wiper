@@ -15,7 +15,7 @@ public class Constants
         OPEN(3),
         UNKNOWN(4);
 
-        private final Integer value;
+        public final Integer value;
         TRANSACTION_STATUS(Integer value)
         {
             this.value = value;
