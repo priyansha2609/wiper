@@ -10,4 +10,5 @@ public interface OrderCartService
 {
     public Integer processOrderCart(OrderCart orderCart);
     public List<OrderCart> getAllOrdersForCustomer(Integer customerId);
+    public OrderCart getOrderByOrderId(Integer orderId);
 }

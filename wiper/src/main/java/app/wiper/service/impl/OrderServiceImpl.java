@@ -4,10 +4,12 @@ import app.wiper.domain.core.Customer;
 import app.wiper.domain.core.Order;
 import app.wiper.domain.core.ServiceDetails;
 import app.wiper.mapper.interfaces.OrderMapper;
+import app.wiper.mapper.interfaces.TransactionStatusMapper;
 import app.wiper.service.CustomerService;
 import app.wiper.service.OrderService;
 import app.wiper.service.ServiceDetailsService;
 import app.wiper.service.mail.MailClient;
+import app.wiper.util.Constants.TRANSACTION_STATUS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class OrderServiceImpl implements OrderService
 {
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private TransactionStatusMapper transactionStatusMapper;
 
     @Autowired
     private ServiceDetailsService serviceDetailsService;
@@ -65,7 +70,9 @@ public class OrderServiceImpl implements OrderService
 
     private void processSucessfulPayment(Order order)
     {
-        order.setTransactionStatus(Integer.valueOf(1));
+        order.setTransactionStatus(
+                transactionStatusMapper.getTransactionStatus(
+                        TRANSACTION_STATUS.SUCCESS));
         List<ServiceDetails> serviceDetailsList =
                 serviceDetailsService.getServiceDetailsForOrderId(order.getOrderId());
 
@@ -79,7 +86,9 @@ public class OrderServiceImpl implements OrderService
 
     private void processFailedPayment(Order order)
     {
-        order.setTransactionStatus(Integer.valueOf(0));
+        order.setTransactionStatus(
+                transactionStatusMapper.getTransactionStatus(
+                        TRANSACTION_STATUS.FAILURE));
         updateOrder(order);
     }
 

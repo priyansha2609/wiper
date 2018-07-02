@@ -11,7 +11,7 @@
         <result property="name" column="name" jdbcType="VARCHAR" />
         <result property="aadharNumber" column="aadhar_number" jdbcType="VARCHAR" />
         <result property="isActive" column="is_active" jdbcType="BIT" />
-    		<association property="credentials" column="{entity_type_id=entity_type_id,entity_id=customer_id}"
+        <association property="credentials" column="{entityTypeId=entity_type_id,entityId=customer_id}"
             javaType="app.wiper.domain.core.Credentials" select="app.wiper.mapper.interfaces.CredentialsMapper.getCredentialsForEntityIdAndEntityTypeId" />
         <association property="entityType" column="entity_type_id"
             javaType="app.wiper.domain.type.EntityType" select="app.wiper.mapper.interfaces.EntityTypeMapper.getEntityTypeById" />

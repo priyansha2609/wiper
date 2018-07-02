@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import app.wiper.domain.core.Credentials;
+import app.wiper.domain.type.EntityType;
+import app.wiper.mapper.interfaces.CredentialsMapper;
+import app.wiper.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +29,27 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	AddressMapper addressMapper;
-	
-	@Autowired
-	MetaDataService metaDataService;
-	
-	
+
+    @Autowired
+    MetaDataService metaDataService;
+
+    @Autowired
+    private CredentialsMapper credentialsMapper;
+
 	@Override
 	public Customer getCustomerById(Integer customerId) {
 		// TODO Auto-generated method stub
 		return customerMapper.getCustomerById(customerId);
 	}
-	
-	public void insertAddressForCustomer(Integer customerId, CorrespondenceAddress corrAdd) {
+
+    @Override
+    public Customer getCustomerByEmailId(String emailId)
+    {
+        Integer entityId = credentialsMapper.getCredentialsByEmailId(emailId);
+        return customerMapper.getCustomerById(entityId);
+    }
+
+    public void insertAddressForCustomer(Integer customerId, CorrespondenceAddress corrAdd) {
 		Map<String, Object> params = new HashMap<>();
         params.put("customerId", customerId);
         params.put("address", corrAdd);
@@ -95,4 +108,15 @@ public class CustomerServiceImpl implements CustomerService {
 		return isCityValid;
 	}
 	
+
+    private void upsertCredentials(Customer customer)
+    {
+        Map<String, Object> params = new HashMap<>();
+        params.put("credentials", customer.getCredentials());
+        params.put("entityTypeId", customer.getEntityType().getEntityTypeId());
+        params.put("entityId", customer.getCustomerId());
+
+        credentialsMapper.upsertCredentials(params);
+    }
+
 }

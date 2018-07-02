@@ -1,6 +1,5 @@
 package app.wiper.controller;
 
-import app.wiper.domain.core.Order;
 import app.wiper.domain.core.OrderCart;
 import app.wiper.domain.core.ServiceDetails;
 import app.wiper.service.OrderCartService;
@@ -20,9 +19,9 @@ public class OrderController
     private OrderCartService orderCartService;
 
     @RequestMapping("/getOrderById")
-    public Order getOrderById(@RequestParam Integer orderId)
+    public OrderCart getOrderById(@RequestParam Integer orderId)
     {
-        return orderService.getOrderById(orderId);
+        return orderCartService.getOrderByOrderId(orderId);
     }
 
     @RequestMapping("/getServiceDetailsForOrderId")
