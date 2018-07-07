@@ -1,19 +1,16 @@
 package app.wiper.domain.type;
 
+import app.wiper.util.Constants.SUBSCRIPTION_TYPE;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
-public class ServiceType implements Serializable
+public class SubscriptionType
 {
-    Integer serviceTypeId;
+    SUBSCRIPTION_TYPE subscriptionType;
     String name;
     String description;
     Boolean isActive;
     Integer orderId;
-    SubscriptionType subscriptionType;
-    String imageUrl;
 }

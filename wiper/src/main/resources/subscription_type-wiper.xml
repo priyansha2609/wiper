@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.SubscriptionTypeMapper">
+
+    <resultMap id="subscriptionType" type="app.wiper.domain.type.SubscriptionType">
+        <result property="name" column="name" jdbcType="VARCHAR" />
+        <result property="description" column="description" jdbcType="VARCHAR" />
+        <result property="orderId" column="order_id" jdbcType="INTEGER" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+        <result property="subscriptionType" column="subscription_type_id"
+                typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+
+    </resultMap>
+
+    <select id="getAllSubscriptionTypes" resultMap="subscriptionType">
+        select * from subscription_type
+    </select>
+
+    <select id="getSubscriptionTypeById" resultMap="subscriptionType">
+        select * from subscription_type where subscription_type_id = #{subscriptionTypeId}
+    </select>
+    <select id="getSubscriptionOfType" resultMap="subscriptionType">
+        select * from subscription_type where subscription_type_id = #{subscriptionType.value}
+    </select>
+
+</mapper>

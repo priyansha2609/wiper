@@ -3,15 +3,10 @@ package app.wiper.controller;
 import java.util.List;
 
 import app.wiper.domain.core.Rate;
-import app.wiper.domain.type.Area;
-import app.wiper.domain.type.City;
-import app.wiper.domain.type.EntityType;
-import app.wiper.domain.type.ServiceSlot;
-import app.wiper.domain.type.ServiceType;
-import app.wiper.domain.type.TransactionStatus;
-import app.wiper.domain.type.VehicleType;
+import app.wiper.domain.type.*;
 import app.wiper.service.MetaDataService;
 import app.wiper.service.ServiceSlotService;
+import app.wiper.service.SubscriptionTypeService;
 import app.wiper.service.TransactionStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +25,9 @@ public class MetadataController {
 
     @Autowired
     private ServiceSlotService serviceSlotService;
+
+    @Autowired
+    private SubscriptionTypeService subscriptionTypeService;
 
 	@RequestMapping("/getAllVehicleTypes")
 	public List<VehicleType> getAllVehicleTypes(){
@@ -109,5 +107,17 @@ public class MetadataController {
     public ServiceSlot getServiceSlotById(@RequestParam Integer slotId)
     {
         return serviceSlotService.getServiceSlotById(slotId);
+    }
+
+    @RequestMapping("/getSubscriptionTypeById")
+    public SubscriptionType getSubscriptionType(@RequestParam Integer subscriptionTypeId)
+    {
+        return subscriptionTypeService.getSubscriptionTypeById(subscriptionTypeId);
+    }
+
+    @RequestMapping("/getAllSubscriptionTypes")
+    public List<SubscriptionType> getAllSubscriptionTypes()
+    {
+        return subscriptionTypeService.getAllSubscriptionTypes();
     }
 }

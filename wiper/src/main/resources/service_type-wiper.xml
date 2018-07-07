@@ -10,12 +10,11 @@
         <result property="name" column="name" jdbcType="VARCHAR" />
         <result property="description" column="description" jdbcType="VARCHAR" />
         <result property="orderId" column="order_id" jdbcType="INTEGER" />
-        <!--<result property="subscriptionType" column="subscription_type_id"-->
-                <!--javaType="app.wiper.util.Constants$SUBSCRIPTION_TYPE"-->
-                <!--jdbcType="INTEGER" />-->
         <result property="isActive" column="is_active" jdbcType="BIT" />
-        <result property="subscriptionType" column="subscription_type_id" jdbcType="INTEGER" />
         <result property="imageUrl" column="url" jdbcType="VARCHAR" />
+        <association property="subscriptionType" column="subscription_type_id"
+                     javaType="app.wiper.domain.type.SubscriptionType"
+                     select="app.wiper.mapper.interfaces.SubscriptionTypeMapper.getSubscriptionTypeById" />
     </resultMap>
 
     <select id="getAllServiceTypes" resultMap="serviceType">
@@ -44,7 +43,7 @@
         #{serviceType.description},
         #{serviceType.orderId},
         #{serviceType.isActive},
-        #{serviceType.subscriptionType},
+        #{serviceType.subscriptionType.ordinal},
         #{serviceType.url}
         )
         ON DUPLICATE KEY
@@ -52,7 +51,7 @@
         description =  IF(#{serviceType.description} IS NOT NULL, #{serviceType.description}, description),
         order_id = IF(#{serviceType.orderId} IS NOT NULL, #{serviceType.orderId}, order_id),
         is_active = IF(#{serviceType.isActive} IS NOT NULL, #{serviceType.isActive}, is_active),
-        subscription_type_id = IF(#{serviceType.subscriptionType} IS NOT NULL, #{serviceType.subscriptionType}, subscription_type_id),
+        subscription_type_id = IF(#{serviceType.subscriptionType.ordinal} IS NOT NULL, #{serviceType.subscriptionType.ordinal}, subscription_type_id),
         url = IF(#{serviceType.imageUrl} IS NOT NULL, #{serviceType.imageUrl}, url);
         <selectKey keyProperty="serviceTypeId" resultType="Integer" order="AFTER">
             <choose>
