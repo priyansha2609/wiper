@@ -3,19 +3,20 @@ package app.wiper.controller;
 import java.util.List;
 
 import app.wiper.domain.core.Rate;
+import app.wiper.domain.type.Area;
+import app.wiper.domain.type.City;
+import app.wiper.domain.type.EntityType;
+import app.wiper.domain.type.ServiceSlot;
 import app.wiper.domain.type.ServiceType;
 import app.wiper.domain.type.TransactionStatus;
+import app.wiper.domain.type.VehicleType;
+import app.wiper.service.MetaDataService;
+import app.wiper.service.ServiceSlotService;
 import app.wiper.service.TransactionStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import app.wiper.domain.type.Area;
-import app.wiper.domain.type.City;
-import app.wiper.domain.type.EntityType;
-import app.wiper.domain.type.VehicleType;
-import app.wiper.service.MetaDataService;
 
 @RestController
 public class MetadataController {
@@ -26,6 +27,9 @@ public class MetadataController {
 
     @Autowired
     private TransactionStatusService transactionStatusService;
+
+    @Autowired
+    private ServiceSlotService serviceSlotService;
 
 	@RequestMapping("/getAllVehicleTypes")
 	public List<VehicleType> getAllVehicleTypes(){
@@ -93,5 +97,17 @@ public class MetadataController {
     public TransactionStatus getTransactionStatusById(@RequestParam Integer transactionStatusId)
     {
         return transactionStatusService.getTransactionStatusById(transactionStatusId);
+    }
+
+    @RequestMapping("/getAllServiceSlots")
+    public List<ServiceSlot> getAllServiceSlots()
+    {
+        return serviceSlotService.getAllServiceSlots();
+    }
+
+    @RequestMapping("/getServiceSlotById")
+    public ServiceSlot getServiceSlotById(@RequestParam Integer slotId)
+    {
+        return serviceSlotService.getServiceSlotById(slotId);
     }
 }

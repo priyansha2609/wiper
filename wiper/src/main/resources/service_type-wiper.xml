@@ -15,6 +15,7 @@
                 <!--jdbcType="INTEGER" />-->
         <result property="isActive" column="is_active" jdbcType="BIT" />
         <result property="subscriptionType" column="subscription_type_id" jdbcType="INTEGER" />
+        <result property="imageUrl" column="url" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="getAllServiceTypes" resultMap="serviceType">
@@ -33,7 +34,8 @@
         description,
         order_id,
         is_active,
-        subscription_type_id
+        subscription_type_id,
+        url
         )
         VALUES
         (
@@ -42,14 +44,16 @@
         #{serviceType.description},
         #{serviceType.orderId},
         #{serviceType.isActive},
-        #{serviceType.subscriptionType}
+        #{serviceType.subscriptionType},
+        #{serviceType.url}
         )
         ON DUPLICATE KEY
         UPDATE name = IF(#{serviceType.name} IS NOT NULL, #{serviceType.name}, name),
         description =  IF(#{serviceType.description} IS NOT NULL, #{serviceType.description}, description),
         order_id = IF(#{serviceType.orderId} IS NOT NULL, #{serviceType.orderId}, order_id),
         is_active = IF(#{serviceType.isActive} IS NOT NULL, #{serviceType.isActive}, is_active),
-        subscription_type_id = IF(#{serviceType.subscriptionType} IS NOT NULL, #{serviceType.subscriptionType}, subscription_type_id);
+        subscription_type_id = IF(#{serviceType.subscriptionType} IS NOT NULL, #{serviceType.subscriptionType}, subscription_type_id),
+        url = IF(#{serviceType.imageUrl} IS NOT NULL, #{serviceType.imageUrl}, url);
         <selectKey keyProperty="serviceTypeId" resultType="Integer" order="AFTER">
             <choose>
                 <when test="serviceType.serviceTypeId != null">

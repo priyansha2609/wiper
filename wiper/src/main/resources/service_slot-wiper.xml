@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.ServiceSlotMapper">
+
+    <resultMap id="serviceSlot" type="app.wiper.domain.type.ServiceSlot">
+        <result property="slotId" column="slot_id" jdbcType="INTEGER" />
+        <result property="startTime" column="start_time" jdbcType="TIME" />
+        <result property="endTime" column="end_time" jdbcType="TIME" />
+        <result property="orderId" column="order_id" jdbcType="INTEGER" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+    </resultMap>
+
+    <select id="getAllServiceSlots" resultMap="serviceSlot">
+        select * from service_slots
+    </select>
+
+    <select id="getServiceSlotById" resultMap="serviceSlot">
+        select * from service_slots where slot_id = #{slotId}
+    </select>
+</mapper>

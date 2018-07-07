@@ -16,6 +16,8 @@
                      select="app.wiper.mapper.interfaces.ServiceTypeMapper.getServiceTypeById" />
         <association property="order" column="order_id" javaType="app.wiper.domain.core.Order"
                      select="app.wiper.mapper.interfaces.OrderMapper.getOrderById" />
+        <association property="serviceSlot" column="slot_id" javaType="app.wiper.domain.type.ServiceSlot"
+                     select="app.wiper.mapper.interfaces.ServiceSlotMapper.getServiceSlotById" />
     </resultMap>
 
     <select id="getServiceDetailsForVehicle" resultMap="serviceDetails">
@@ -39,7 +41,8 @@
         subscription_end_date,
         buffer_days_availed,
         is_active,
-        order_id
+        order_id,
+        slot_id
         )
         VALUES
         (
@@ -50,7 +53,8 @@
         #{serviceDetails.subscriptionEndDate},
         #{serviceDetails.bufferDaysAvailed},
         #{serviceDetails.isActive},
-        #{serviceDetails.order.orderId}
+        #{serviceDetails.order.orderId},
+        #{serviceDetails.serviceSlot.slotId}
         )
         ON DUPLICATE KEY
         UPDATE vehicle_id = IF(#{serviceDetails.vehicleId} IS NOT NULL, #{serviceDetails.vehicleId}, vehicle_id),
@@ -59,7 +63,8 @@
         subscription_end_date = IF(#{serviceDetails.subscriptionEndDate} IS NOT NULL, #{serviceDetails.subscriptionEndDate}, subscription_end_date),
         buffer_days_availed = IF(#{serviceDetails.bufferDaysAvailed} IS NOT NULL, #{serviceDetails.bufferDaysAvailed}, buffer_days_availed),
         is_active = IF(#{serviceDetails.isActive} IS NOT NULL, #{serviceDetails.isActive}, is_active),
-        order_id = IF(#{serviceDetails.order.orderId} IS NOT NULL, #{serviceDetails.order.orderId}, order_id);
+        order_id = IF(#{serviceDetails.order.orderId} IS NOT NULL, #{serviceDetails.order.orderId}, order_id),
+        slot_id = IF(#{serviceDetails.serviceSlot.slotId} IS NOT NULL, #{serviceDetails.serviceSlot.slotId}, slot_id);
         <selectKey keyProperty="serviceDetailId" resultType="Integer" order="AFTER">
             <choose>
                 <when test="serviceDetails.serviceDetailId != null">

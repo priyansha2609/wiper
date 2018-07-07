@@ -17,4 +17,5 @@ public class ServiceType implements Serializable
     Integer orderId;
 //    SUBSCRIPTION_TYPE subscriptionType;
     Integer subscriptionType;
+    String imageUrl;
 }
