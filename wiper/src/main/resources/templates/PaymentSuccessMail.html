@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment successful!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 15px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    Hi <span th:text="${customerName}">there!</span>,
+    <p>
+        Congratulations! Your payment was successful.
+    </p>
+    <p>
+        Payment details:
+        <table>
+            <tr>
+                <th>Customer id</th>
+                <th>Order id</th>
+                <th>Date</th>
+                <th>Payment mode</th>
+                <th>Basic charges</th>
+                <th>GST</th>
+                <th>Total amount paid</th>
+            </tr>
+            <tr>
+                <td th:text="${order.customerId}"></td>
+                <td th:text="${order.orderId}"></td>
+                <td th:text="${order.dateOfPayment}"></td>
+                <td th:text="${order.modeOfPayment}"></td>
+                <td th:text="${order.basicCharge}"></td>
+                <td th:text="${order.taxPercent}"></td>
+                <td th:text="${order.amountOfPayment}"></td>
+            </tr>
+        </table>
+    </p>
+    <p>
+        Your subscriptions:
+        <table>
+            <tr>
+                <th>Vehicle id</th>
+                <th>Service</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Service slot</th>
+            </tr>
+            <tr th:each="sd: ${serviceDetails}">
+                <td th:text="${vehicleMap.get(sd.vehicleId)}" />
+                <td th:text="${sd.service.name}" />
+                <td th:text="${sd.subscriptionStartDate}" />
+                <td th:text="${sd.subscriptionEndDate}" />
+                <td th:text="${sd.serviceSlot}" />
+            </tr>
+        </table>
+    </p>
+
+    <p>
+    For any queries and feedback, please write to
+        <a th:href="${replyMail}">us</a>.
+    </p>
+
+    Thanks,<br/>
+    Team wiper
+</body>
+</html>

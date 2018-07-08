@@ -46,7 +46,8 @@ public class PaytmController
         boolean isValidResponse =
                 paytmGatewayManager.validateAndPersistResponse(transactionResponseParams);
 
-        orderService.processPaymentResponse(0,
+        orderService.processPaymentResponse(
+                transactionResponseParams.getPaymentMode(),
                 Integer.valueOf(transactionResponseParams.getOrderId()),
                 isValidResponse);
 

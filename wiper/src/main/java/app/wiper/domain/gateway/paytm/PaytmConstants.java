@@ -99,5 +99,20 @@ public class PaytmConstants
             this.value = value;
         }
     }
+
+    public enum PAYMENT_MODES
+    {
+        CC("Credit card"),
+        DC("Debit card"),
+        Wallet("Paytm wallet"),
+        IMPS("IMPS"),
+        PPI("PPI");
+
+        private String value;
+        PAYMENT_MODES(String value)
+        {
+            this.value = value;
+        }
+    }
 }
 

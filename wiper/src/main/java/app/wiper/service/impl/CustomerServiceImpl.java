@@ -67,14 +67,17 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Override
 	public void insertCustomer(Customer customer) throws Exception {
-		CorrespondenceAddress correspondenceAddress = customer.getCorrespondenceAddress();
-		if(isCityValid(correspondenceAddress) && isAreaValid(correspondenceAddress)) {
-			
-			Integer customerId = insertCustomerBasicData(customer);
-			customer.setCustomerId(customerId);
-			insertAddressForCustomer(customerId, customer.getCorrespondenceAddress());	
-		}
-		else throw new Exception("We don't service in this area.");
+        Integer customerId = insertCustomerBasicData(customer);
+        customer.setCustomerId(customerId);
+        upsertCredentials(customer);
+//		CorrespondenceAddress correspondenceAddress = customer.getCorrespondenceAddress();
+//		if(isCityValid(correspondenceAddress) && isAreaValid(correspondenceAddress)) {
+//
+//			Integer customerId = insertCustomerBasicData(customer);
+//			customer.setCustomerId(customerId);
+//			insertAddressForCustomer(customerId, customer.getCorrespondenceAddress());
+//		}
+//		else throw new Exception("We don't service in this area.");
 	}
 	private Boolean isAreaValid(CorrespondenceAddress correspondenceAddress) {
 		Boolean isAreaValid = false;

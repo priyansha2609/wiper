@@ -14,4 +14,10 @@ public class ServiceSlot
     Time endTime;
     Boolean isActive;
     Integer orderId;
+
+    @Override
+    public String toString()
+    {
+        return startTime.toString() + "-" + endTime.toString();
+    }
 }

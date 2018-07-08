@@ -1,5 +1,6 @@
 package app.wiper.service.mail;
 
+import app.wiper.util.Constants;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @Log4j2
@@ -25,16 +28,18 @@ public class MailClient
 
     public void prepareAndSend(final String recipient,
                                final String subject,
-                               final String message)
+                               final String template,
+                               final Map<String, Object> params)
     {
         MimeMessagePreparator messagePreparator =
             mimeMessage -> {
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-                messageHelper.setFrom("wipers.401@gmail.com", "Wiper Support");
+                messageHelper.setFrom(Constants.WIPER_SUPPORT_MAIL, "Wiper Support");
                 messageHelper.setTo(recipient);
                 messageHelper.setSubject(subject);
 
-                String content = mailContentBuilder.build(message);
+                params.put("replyMail", "mailto:" + Constants.WIPER_SUPPORT_MAIL);
+                String content = mailContentBuilder.build(template, params);
 
                 messageHelper.setText(content, true);
             };

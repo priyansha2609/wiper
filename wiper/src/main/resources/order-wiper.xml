@@ -11,7 +11,7 @@
         <result property="amountOfPayment" column="amount_of_payment" jdbcType="FLOAT" />
         <result property="basicCharge" column="basic_charge" jdbcType="FLOAT" />
         <result property="taxPercent" column="tax_percent" jdbcType="FLOAT" />
-        <result property="modeOfPayment" column="mode_of_payment" jdbcType="INTEGER" />
+        <result property="modeOfPayment" column="mode_of_payment" jdbcType="VARCHAR" />
         <result property="comment" column="comment" jdbcType="VARCHAR" />
         <association property="transactionStatus" column="transaction_status_id"
                      javaType="app.wiper.domain.type.TransactionStatus"

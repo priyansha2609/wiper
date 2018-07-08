@@ -13,7 +13,7 @@ public interface OrderService
     List<ServiceDetails> getServiceDetailsForOrderId(Integer orderId);
     Integer insertOrder(Order order);
     Integer updateOrder(Order order);
-    void processPaymentResponse(Integer paymentMode,
+    void processPaymentResponse(String paymentMode,
                                 Integer orderId,
                                 boolean isValidResponse);
     List<Order> getOrdersByCustomerId(Integer customerId);

@@ -15,7 +15,7 @@ public class Order {
 	Double amountOfPayment;
 	Double basicCharge;
 	Double taxPercent;
-	Integer modeOfPayment;
+	String modeOfPayment;
 	String comment;
     TransactionStatus transactionStatus;
 }

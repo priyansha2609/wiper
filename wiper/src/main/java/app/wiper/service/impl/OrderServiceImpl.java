@@ -8,16 +8,20 @@ import app.wiper.mapper.interfaces.TransactionStatusMapper;
 import app.wiper.service.CustomerService;
 import app.wiper.service.OrderService;
 import app.wiper.service.ServiceDetailsService;
+import app.wiper.service.VehicleService;
 import app.wiper.service.mail.MailClient;
 import app.wiper.util.Constants.TRANSACTION_STATUS;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class OrderServiceImpl implements OrderService
 {
     @Autowired
@@ -34,6 +38,9 @@ public class OrderServiceImpl implements OrderService
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private VehicleService vehicleService;
 
     private Integer upsertOrder(Order order)
     {
@@ -81,7 +88,7 @@ public class OrderServiceImpl implements OrderService
 
         updateOrder(order);
 
-
+        notifyCustomer(order, serviceDetailsList, true);
     }
 
     private void processFailedPayment(Order order)
@@ -93,7 +100,7 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
-    public void processPaymentResponse(Integer paymentMode,
+    public void processPaymentResponse(String paymentMode,
                                        Integer orderId,
                                        boolean isValidResponse)
     {
@@ -104,10 +111,9 @@ public class OrderServiceImpl implements OrderService
             processSucessfulPayment(order);
         }
         else{
+            log.warn("Transaction failed: " + order);
             processFailedPayment(order);
         }
-
-        notifyCustomer(order, isValidResponse);
     }
 
     @Override
@@ -116,7 +122,9 @@ public class OrderServiceImpl implements OrderService
         return orderMapper.getOrdersByCustomerId(customerId);
     }
 
-    private void notifyCustomer(Order order, boolean isValidTransaction)
+    private void notifyCustomer(Order order,
+                                List<ServiceDetails> serviceDetailsList,
+                                boolean isValidTransaction)
     {
         Customer customer = customerService.getCustomerById(order.getCustomerId());
         String subject = "Transaction successful";
@@ -124,7 +132,20 @@ public class OrderServiceImpl implements OrderService
                 " for Order#" + order.getOrderId() +
                 (isValidTransaction ? " was successful!": " failed! Please retry.");
 
+        log.info("Transaction status: " + message);
+        Map<String, Object> params = new HashMap<>();
+        params.put("customerName", customer.getName());
+        params.put("order", order);
+        Map<Integer, String> vehicleNameMap = serviceDetailsList.stream()
+                .collect(Collectors.toMap(
+                        ServiceDetails::getVehicleId,
+                        sd -> vehicleService.getVehicleById(sd.getVehicleId())
+                                            .getVehicleNumber(),
+                        (a, b) -> b));
+
+        params.put("serviceDetails", serviceDetailsList);
+        params.put("vehicleMap", vehicleNameMap);
         mailClient.prepareAndSend(customer.getCredentials().getEmailId(),
-                subject, message);
+                subject, "PaymentSuccessMail", params);
     }
 }

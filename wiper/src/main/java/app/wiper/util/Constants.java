@@ -22,7 +22,6 @@ public class Constants
         }
     }
 
-    @Getter
     public enum SUBSCRIPTION_TYPE
     {
         ONCE,
@@ -32,4 +31,7 @@ public class Constants
         QUARTERLY,
         ANNUALLY
     }
+
+    public final static String WIPER_SUPPORT_MAIL=
+            "wipers.401@gmail.com";
 }
