@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import app.wiper.domain.core.Credentials;
+import app.wiper.domain.core.Entity;
 import app.wiper.domain.type.EntityType;
 import app.wiper.mapper.interfaces.CredentialsMapper;
+import app.wiper.mapper.interfaces.EntityTypeMapper;
 import app.wiper.service.MetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CredentialsMapper credentialsMapper;
+
+    @Autowired
+    private EntityTypeMapper entityTypeMapper;
 
 	@Override
 	public Customer getCustomerById(Integer customerId) {
@@ -67,6 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Override
 	public void insertCustomer(Customer customer) throws Exception {
+        customer.setEntityType(entityTypeMapper.getEntityTypeById(1));
         Integer customerId = insertCustomerBasicData(customer);
         customer.setCustomerId(customerId);
         upsertCredentials(customer);

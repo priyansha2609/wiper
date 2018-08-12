@@ -5,9 +5,12 @@
 
 <mapper namespace="app.wiper.mapper.interfaces.AddressMapper">
     <resultMap id="vehicleAddress" type="app.wiper.domain.core.VehicleAddress">
-        <result property="parkingLotNo" column="lot_num" jdbcType="VARCHAR" />
-        <result property="floor" column="floor" jdbcType="VARCHAR" />
+        <result property="vehicleId" column="vehicle_id" jdbcType="INTEGER" />
+        <result property="parkingLot" column="parking_lot" jdbcType="VARCHAR" />
+        <result property="flatNumber" column="flat_no" jdbcType="VARCHAR" />
         <result property="building" column="building" jdbcType="VARCHAR" />
+        <result property="subArea1" column="sub_area_1" jdbcType="VARCHAR" />
+        <result property="subArea2" column="sub_area_2" jdbcType="VARCHAR" />
         <result property="pin" column="pin" jdbcType="INTEGER" />
         <association property="area" column="area_id"
             javaType="app.wiper.domain.type.Area" select="getAreaById" />
@@ -149,32 +152,36 @@
     
       <insert id="insertAddressForVehicle" parameterType="java.util.HashMap">
         INSERT INTO wiper.vehicle_add(
-        id,
-        vehicle_id ,
-        lot_num,
-        floor ,
+        vehicle_id,
+        parking_lot,
+        flat_no,
         building,
-        pin ,
-        area_id ,
-        city_id
+        pin,
+        area_id,
+        city_id,
+        sub_area_1,
+        sub_area_2
         )
         VALUES
         (
-        #{address.addressId},
         #{vehicleId},
-        #{address.parkingLotNo},
-        #{address.floor},
+        #{address.parkingLot},
+        #{address.flatNumber},
         #{address.building},
         #{address.pin},
         #{address.area.areaId},
-        #{address.city.cityId}
+        #{address.city.cityId},
+        #{address.subArea1},
+        #{address.subArea2}
         )
  		ON DUPLICATE KEY 
-        UPDATE  lot_num = IF(#{address.parkingLotNo} IS NOT NULL, #{address.parkingLotNo}, lot_num), 
-        floor = IF(#{address.floor} IS NOT NULL, #{address.floor}, floor),
+        UPDATE  parking_lot = IF(#{address.parkingLot} IS NOT NULL, #{address.parkingLot}, parking_lot),
+        flat_no = IF(#{address.flatNumber} IS NOT NULL, #{address.flatNumber}, flat_no),
 		building = IF(#{address.building} IS NOT NULL, #{address.building}, building),
 		pin = IF(#{address.pin} IS NOT NULL, #{address.pin}, pin),
 		area_id = IF(#{address.area.areaId} IS NOT NULL, #{address.area.areaId}, area_id),
-		city_id = IF(#{address.city.cityId} IS NOT NULL, #{address.city.cityId}, city_id);
+		city_id = IF(#{address.city.cityId} IS NOT NULL, #{address.city.cityId}, city_id),
+        sub_area_1 = IF(#{address.subArea1} IS NOT NULL, #{address.subArea1}, sub_area_1),
+        sub_area_2 = IF(#{address.subArea2} IS NOT NULL, #{address.subArea2}, sub_area_2);
     </insert>     
 </mapper>

@@ -31,6 +31,7 @@
         INSERT INTO customer
         (
         customer_id,
+        entity_type_id,
         name,
         aadhar_number,
         is_active
@@ -38,13 +39,16 @@
         VALUES
         (
         #{customer.customerId},
+        #{customer.entityType.entityTypeId},
         #{customer.name},
         #{customer.aadharNumber},
         #{customer.isActive}
         )
         ON DUPLICATE KEY 
-        UPDATE name = IF(#{customer.name} IS NOT NULL, #{customer.name}, name), aadhar_number = IF(#{customer.aadharNumber} IS NOT NULL, #{customer.aadharNumber}, aadhar_number),
-		entity_type_id = IF(#{customer.entityType} IS NOT NULL, #{customer.entityType.entityTypeId}, entity_type_id),is_active = IF(#{customer.isActive} IS NOT NULL, #{customer.isActive}, is_active);
+        UPDATE name = IF(#{customer.name} IS NOT NULL, #{customer.name}, name),
+        aadhar_number = IF(#{customer.aadharNumber} IS NOT NULL, #{customer.aadharNumber}, aadhar_number),
+		entity_type_id = IF(#{customer.entityType} IS NOT NULL, #{customer.entityType.entityTypeId}, entity_type_id),
+        is_active = IF(#{customer.isActive} IS NOT NULL, #{customer.isActive}, is_active);
          <selectKey keyProperty="customerId" resultType="Integer" order="AFTER">
             <choose>
                 <when test="customer.customerId != null">

@@ -8,12 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VehicleAddress {
-	Integer addressId;
-	String parkingLotNo;
-	String floor;
+	Integer vehicleId;
+	String parkingLot;
+	String flatNumber;
 	String building;
 	Area area;
 	City city;
 	Integer pin;
-
+    String subArea1;
+    String subArea2;
 }
