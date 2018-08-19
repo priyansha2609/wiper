@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Feedback</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 15px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+Hi <span th:text="${customerName}">there!</span>,
+<p>
+    Thanks for your valuable feedback.
+</p>
+<p>
+    You mentioned:
+    <span th:text="${feedback}">Default feedback!</span>
+</p>
+<p>
+    For any other queries and feedback, please write to
+    <a th:href="${replyMail}">us</a>.
+</p>
+
+Thanks,<br/>
+Team wiper
+</body>
+</html>
