@@ -54,6 +54,15 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.getCustomerById(entityId);
     }
 
+    @Override
+    public Customer getCustomerByPhoneNumber(String phoneNumber)
+    {
+        Integer entityId =
+                credentialsMapper.getCredentialsByPhoneNumber(phoneNumber);
+
+        return customerMapper.getCustomerById(entityId);
+    }
+
     public void insertAddressForCustomer(Integer customerId, CorrespondenceAddress corrAdd) {
 		Map<String, Object> params = new HashMap<>();
         params.put("customerId", customerId);

@@ -35,6 +35,12 @@ public class CustomerController {
         return customerService.getCustomerByEmailId(emailId);
     }
 
+    @RequestMapping("/getCustomerByPhoneNumber")
+    public Customer getCustomerByPhoneNumber(@RequestParam String phoneNumber)
+    {
+        return customerService.getCustomerByPhoneNumber(phoneNumber);
+    }
+
 	@RequestMapping(method= RequestMethod.POST, value="/insertCustomer")
 	public void insertCustomer(@RequestBody Customer customer) throws Exception{
 		 customerService.insertCustomer(customer);
