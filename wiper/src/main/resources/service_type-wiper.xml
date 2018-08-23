@@ -15,6 +15,10 @@
         <association property="subscriptionType" column="subscription_type_id"
                      javaType="app.wiper.domain.type.SubscriptionType"
                      select="app.wiper.mapper.interfaces.SubscriptionTypeMapper.getSubscriptionTypeById" />
+   	    <association property="serviceSuperType" column="super_type_id"
+                     javaType="app.wiper.domain.type.ServiceSuperType"
+                     select="app.wiper.mapper.interfaces.ServiceSuperTypeMapper.getServiceSuperTypeById" />
+   
     </resultMap>
 
     <select id="getAllServiceTypes" resultMap="serviceType">
