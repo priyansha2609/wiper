@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import app.wiper.domain.type.Area;
 import app.wiper.domain.type.City;
 import app.wiper.domain.type.EntityType;
+import app.wiper.domain.type.ServiceSuperType;
 import app.wiper.domain.type.VehicleType;
 
 @Service
@@ -19,6 +20,7 @@ public interface MetaDataService {
 	List<EntityType> getAllEntityTypes();
 
     List<ServiceType> getAllServiceTypes();
+    List<ServiceSuperType>getAllServiceSuperTypes();
     List<Rate> getAllRates();
 	VehicleType getVehicleTypeById(Integer id);
 	

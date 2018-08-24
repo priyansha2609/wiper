@@ -44,6 +44,12 @@ public class MetadataController {
     {
         return metaDataService.getAllServiceTypes();
     }
+    
+    @RequestMapping("/getAllServiceSuperTypes")
+    public List<ServiceSuperType> getAllServiceSuperTypes()
+    {
+        return metaDataService.getAllServiceSuperTypes();
+    }
 
     @RequestMapping("/getAllRates")
     public List<Rate> getAllRates()

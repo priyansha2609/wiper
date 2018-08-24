@@ -15,9 +15,7 @@
         <association property="subscriptionType" column="subscription_type_id"
                      javaType="app.wiper.domain.type.SubscriptionType"
                      select="app.wiper.mapper.interfaces.SubscriptionTypeMapper.getSubscriptionTypeById" />
-   	    <association property="serviceSuperType" column="super_type_id"
-                     javaType="app.wiper.domain.type.ServiceSuperType"
-                     select="app.wiper.mapper.interfaces.ServiceSuperTypeMapper.getServiceSuperTypeById" />
+   	   
    
     </resultMap>
 
@@ -27,6 +25,10 @@
 
     <select id="getServiceTypeById" resultMap="serviceType">
         select * from service_type where service_type_id = #{serviceTypeId}
+    </select>
+    
+    <select id="getServiceTypesBySuperTypeById" resultMap="serviceType">
+        select * from service_type where super_type_id = #{serviceSuperTypeId}
     </select>
 
     <insert id="upsertServiceType" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="serviceTypeId" >

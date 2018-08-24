@@ -15,6 +15,5 @@ public class ServiceType implements Serializable
     Boolean isActive;
     Integer orderId;
     SubscriptionType subscriptionType;
-    ServiceSuperType serviceSuperType;
     String imageUrl;
 }

@@ -1,6 +1,7 @@
 package app.wiper.domain.type;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +14,6 @@ public class ServiceSuperType implements Serializable
     String name;
     String description;
     String imageUrl;
+    ServiceType serviceTypes;
 }
 

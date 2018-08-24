@@ -8,6 +8,7 @@ import java.util.Map;
 import app.wiper.domain.core.Rate;
 import app.wiper.domain.type.ServiceType;
 import app.wiper.mapper.interfaces.RateMapper;
+import app.wiper.mapper.interfaces.ServiceSuperTypeMapper;
 import app.wiper.mapper.interfaces.ServiceTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import app.wiper.domain.type.Area;
 import app.wiper.domain.type.City;
 import app.wiper.domain.type.EntityType;
+import app.wiper.domain.type.ServiceSuperType;
 import app.wiper.domain.type.VehicleType;
 import app.wiper.mapper.interfaces.AddressMapper;
 import app.wiper.mapper.interfaces.EntityTypeMapper;
@@ -36,6 +38,10 @@ public class MetaDataServiceImpl implements MetaDataService{
 
     @Autowired
     ServiceTypeMapper serviceTypeMapper;
+    
+    @Autowired
+    ServiceSuperTypeMapper serviceSuperTypeMapper;
+
 
     @Autowired
     RateMapper rateMapper;
@@ -59,6 +65,13 @@ public class MetaDataServiceImpl implements MetaDataService{
     {
         return serviceTypeMapper.getAllServiceTypes();
     }
+    
+
+    @Override
+    public List<ServiceSuperType>getAllServiceSuperTypes(){
+    	 return serviceSuperTypeMapper.getAllServiceSuperTypes();
+    }
+
 
     @Override
     public List<Rate> getAllRates()
