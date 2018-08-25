@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class ServiceType implements Serializable
+public class ServiceType
 {
     Integer serviceTypeId;
     String name;

@@ -11,5 +11,5 @@ public interface ServiceTypeMapper
     List<ServiceType> getAllServiceTypes();
     ServiceType getServiceTypeById(Integer serviceTypeId);
     Integer upsertServiceType(Map<String, Object> params);
-    ServiceType getServiceTypesBySuperTypeById(Integer serviceSuperTypeId);
+    List<ServiceType> getServiceTypesBySuperTypeById(Integer serviceSuperTypeId);
 }

@@ -10,9 +10,11 @@
         <result property="name" column="name" jdbcType="VARCHAR" />
         <result property="description" column="description" jdbcType="VARCHAR" />
         <result property="imageUrl" column="image_url" jdbcType="VARCHAR" />
+        
         <collection property="serviceTypes" column="service_super_type_id"
-                     javaType="app.wiper.domain.type.ServiceType"
-                     select="app.wiper.mapper.interfaces.ServiceTypeMapper.getServiceTypesBySuperTypeById" />
+            ofType="app.wiper.domain.type.ServiceType" 
+            select="app.wiper.mapper.interfaces.ServiceTypeMapper.getServiceTypesBySuperTypeById" />
+          
       </resultMap>
     
 
