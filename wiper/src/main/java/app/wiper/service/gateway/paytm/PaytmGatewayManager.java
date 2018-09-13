@@ -43,7 +43,7 @@ public class PaytmGatewayManager implements GatewayManager
     public String generateChecksum(final TransactionRequestParams transactionRequestParams)
     {
         TreeMap<String,String> paramMap = new TreeMap<String,String>();
-        paramMap.put(PAYLOAD_PARAMETERS.MERCHANT_KEY.getValue(), MERCHANT_CONSTS.MERCHANT_ID.getValue());
+        paramMap.put(PAYLOAD_PARAMETERS.MERCHANT_ID.getValue(), MERCHANT_CONSTS.MERCHANT_ID.getValue());
         paramMap.put(PAYLOAD_PARAMETERS.ORDER_ID.getValue(), transactionRequestParams.getOrderId());
         paramMap.put(PAYLOAD_PARAMETERS.CUSTOMER_ID.getValue(), transactionRequestParams.getCustId());
         paramMap.put(PAYLOAD_PARAMETERS.INDUSTRY_TYPE_ID.getValue(), MERCHANT_CONSTS.INDUSTRY_TYPE_ID.getValue());
