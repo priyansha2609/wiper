@@ -4,6 +4,7 @@ import app.wiper.domain.core.Order;
 import app.wiper.domain.core.OrderCart;
 import app.wiper.domain.core.ServiceDetails;
 import app.wiper.mapper.interfaces.TransactionStatusMapper;
+import app.wiper.service.CouponService;
 import app.wiper.service.OrderCartService;
 import app.wiper.service.OrderService;
 import app.wiper.service.ServiceDetailsService;
@@ -24,6 +25,9 @@ public class OrderCartServiceImpl implements OrderCartService
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private CouponService couponService;
 
     @Autowired
     private TransactionStatusMapper transactionStatusMapper;
@@ -62,7 +66,8 @@ public class OrderCartServiceImpl implements OrderCartService
         return new OrderCart(
                 order,
                 serviceDetailsService.getServiceDetailsForOrderId(
-                    order.getOrderId()));
+                    order.getOrderId()),
+                order.getCoupon());
     }
 
     @Override

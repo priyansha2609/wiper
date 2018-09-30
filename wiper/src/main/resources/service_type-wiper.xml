@@ -31,6 +31,10 @@
         select * from service_type where super_type_id = #{serviceSuperTypeId}
     </select>
 
+    <select id="getEligibleServiceTypesForCoupon" resultMap="serviceType">
+        select * from service_type where service_type_id in (select service_type_id from wiper.coupon_service_type_map where coupon_id = #{couponId})
+    </select>
+
     <insert id="upsertServiceType" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="serviceTypeId" >
         INSERT INTO service_type
         (

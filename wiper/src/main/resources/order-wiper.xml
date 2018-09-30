@@ -10,9 +10,13 @@
         <result property="dateOfPayment" column="date_of_payment" jdbcType="TIMESTAMP" />
         <result property="amountOfPayment" column="amount_of_payment" jdbcType="FLOAT" />
         <result property="basicCharge" column="basic_charge" jdbcType="FLOAT" />
-        <result property="taxPercent" column="tax_percent" jdbcType="FLOAT" />
+        <result property="taxes" column="taxes" jdbcType="FLOAT" />
         <result property="modeOfPayment" column="mode_of_payment" jdbcType="VARCHAR" />
         <result property="comment" column="comment" jdbcType="VARCHAR" />
+        <result property="discount" column="discount" jdbcType="FLOAT" />
+        <association property="coupon" column="coupon"
+                     javaType="app.wiper.domain.core.Coupon"
+                     select="app.wiper.mapper.interfaces.CouponMapper.getCouponByCouponCode" />
         <association property="transactionStatus" column="transaction_status_id"
                      javaType="app.wiper.domain.type.TransactionStatus"
                      select="app.wiper.mapper.interfaces.TransactionStatusMapper.getTransactionStatusById" />
@@ -34,10 +38,12 @@
         date_of_payment,
         amount_of_payment,
         basic_charge,
-        tax_percent,
+        taxes,
         mode_of_payment,
         transaction_status_id,
-        comment
+        comment,
+        coupon,
+        discount
         )
         VALUES
         (
@@ -46,20 +52,24 @@
         #{order.dateOfPayment},
         #{order.amountOfPayment},
         #{order.basicCharge},
-        #{order.taxPercent},
+        #{order.taxes},
         #{order.modeOfPayment},
         #{order.transactionStatus.status.value},
-        #{order.comment}
+        #{order.comment},
+        #{order.coupon.couponCode},
+        #{order.discount}
         )
         ON DUPLICATE KEY
         UPDATE customer_id = IF(#{order.customerId} IS NOT NULL, #{order.customerId}, customer_id),
         date_of_payment = IF(#{order.dateOfPayment} IS NOT NULL, #{order.dateOfPayment}, date_of_payment),
         amount_of_payment = IF(#{order.amountOfPayment} IS NOT NULL, #{order.amountOfPayment}, amount_of_payment),
         basic_charge = IF(#{order.basicCharge} IS NOT NULL, #{order.basicCharge}, basic_charge),
-        tax_percent = IF(#{order.taxPercent} IS NOT NULL, #{order.taxPercent}, tax_percent),
+        taxes = IF(#{order.taxes} IS NOT NULL, #{order.taxes}, taxes),
         mode_of_payment = IF(#{order.modeOfPayment} IS NOT NULL, #{order.modeOfPayment}, mode_of_payment),
         transaction_status_id = IF(#{order.transactionStatus.status.value} IS NOT NULL, #{order.transactionStatus.status.value}, transaction_status_id),
-        comment = IF(#{order.comment} IS NOT NULL, #{order.comment}, comment);
+        comment = IF(#{order.comment} IS NOT NULL, #{order.comment}, comment),
+        coupon = IF(#{order.coupon.couponCode} IS NOT NULL, #{order.coupon.couponCode}, coupon),
+        discount = IF(#{order.discount} IS NOT NULL, #{order.discount}, discount);
         <selectKey keyProperty="orderId" resultType="Integer" order="AFTER">
             <choose>
                 <when test="order.orderId != null">

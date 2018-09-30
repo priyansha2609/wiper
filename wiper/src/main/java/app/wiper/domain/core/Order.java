@@ -14,8 +14,10 @@ public class Order {
 	Date dateOfPayment;
 	Double amountOfPayment;
 	Double basicCharge;
-	Double taxPercent;
+	Double taxes;
+	Double discount;
 	String modeOfPayment;
 	String comment;
+    Coupon coupon;
     TransactionStatus transactionStatus;
 }

@@ -12,4 +12,5 @@ public interface ServiceTypeMapper
     ServiceType getServiceTypeById(Integer serviceTypeId);
     Integer upsertServiceType(Map<String, Object> params);
     List<ServiceType> getServiceTypesBySuperTypeById(Integer serviceSuperTypeId);
+    List<ServiceType> getEligibleServiceTypesForCoupon(Integer coupon_id);
 }

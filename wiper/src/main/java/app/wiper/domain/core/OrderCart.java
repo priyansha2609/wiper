@@ -11,13 +11,17 @@ public class OrderCart
 {
     List<ServiceDetails> serviceDetails;
     Order order;
+    Coupon coupon;
 
     public OrderCart()
     {}
 
-    public OrderCart(Order order, List<ServiceDetails> serviceDetails)
+    public OrderCart(Order order,
+                     List<ServiceDetails> serviceDetails,
+                     Coupon coupon)
     {
         this.order = order;
         this.serviceDetails = serviceDetails;
+        this.coupon = coupon;
     }
 }

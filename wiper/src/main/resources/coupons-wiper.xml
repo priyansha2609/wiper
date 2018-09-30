@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.wiper.mapper.interfaces.CouponMapper">
+    <resultMap id="coupon" type="app.wiper.domain.core.Coupon">
+        <result property="couponId" column="coupon_id" jdbcType="INTEGER" />
+        <result property="couponCode" column="coupon_code" jdbcType="VARCHAR" />
+        <result property="startDate" column="start_date" jdbcType="TIMESTAMP" />
+        <result property="endDate" column="end_date" jdbcType="TIMESTAMP" />
+        <result property="isActive" column="is_active" jdbcType="BIT" />
+        <result property="eligibilityCode" column="eligibility_code" jdbcType="VARCHAR" />
+        <result property="basicDiscountPercent" column="basic_discount_percent" jdbcType="FLOAT" />
+        <result property="taxDiscountPercent" column="tax_discount_percent" jdbcType="FLOAT" />
+        <result property="totalDiscountPercent" column="total_discount_percent" jdbcType="FLOAT" />
+        <result property="discountLimitAmount" column="discount_limit_amount" jdbcType="FLOAT" />
+
+        <collection property="eligibleServiceTypes" column="coupon_id"
+                    ofType="app.wiper.domain.type.ServiceType"
+                    select="app.wiper.mapper.interfaces.ServiceTypeMapper.getEligibleServiceTypesForCoupon" />
+    </resultMap>
+
+    <select id="getCouponById" resultMap="coupon">
+        select * from wiper.coupons where coupon_id = #{couponId}
+    </select>
+
+    <select id="getCouponByCouponCode" resultMap="coupon">
+        select * from wiper.coupons where coupon_code = #{couponCode}
+    </select>
+
+    <insert id="upsertCoupon" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="couponId" >
+        INSERT INTO wiper.coupons
+        (
+        coupon_id,
+        coupon_code,
+        start_date,
+        end_date,
+        is_active,
+        eligibility_code,
+        basic_discount_percent,
+        tax_discount_percent,
+        total_discount_percent,
+        discount_limit_amount
+        )
+        VALUES
+        (
+        #{coupon.couponId},
+        #{coupon.couponCode},
+        #{coupon.startDate},
+        #{coupon.endDate},
+        #{coupon.isActive},
+        #{coupon.eligibilityCode},
+        #{coupon.basicDiscountPercent},
+        #{coupon.taxDiscountPercent},
+        #{coupon.totalDiscountPercent},
+        #{coupon.discountLimitAmount}
+        )
+        ON DUPLICATE KEY
+        UPDATE coupon_code = IF(#{coupon.couponCode} IS NOT NULL, #{coupon.couponCode}, coupon_code),
+        start_date = IF(#{coupon.startDate} IS NOT NULL, #{coupon.startDate}, start_date),
+        end_date = IF(#{coupon.endDate} IS NOT NULL, #{coupon.endDate}, end_date),
+        is_active = IF(#{coupon.isActive} IS NOT NULL, #{coupon.isActive}, is_active),
+        eligibility_code = IF(#{coupon.eligibilityCode} IS NOT NULL, #{coupon.eligibilityCode}, eligibility_code),
+        basic_discount_percent = IF(#{coupon.basicDiscountPercent} IS NOT NULL, #{coupon.basicDiscountPercent}, basic_discount_percent),
+        tax_discount_percent = IF(#{coupon.taxDiscountPercent} IS NOT NULL, #{coupon.taxDiscountPercent}, tax_discount_percent),
+        total_discount_percent = IF(#{coupon.totalDiscountPercent} IS NOT NULL, #{coupon.totalDiscountPercent}, total_discount_percent),
+        discount_limit_amount = IF(#{coupon.discountLimitAmount} IS NOT NULL, #{coupon.discountLimitAmount}, discount_limit_amount);
+        <selectKey keyProperty="couponId" resultType="Integer" order="AFTER">
+            <choose>
+                <when test="coupon.couponId != null">
+                    select #{coupon.couponId};
+                </when>
+                <otherwise>
+                    SELECT LAST_INSERT_ID() as couponId;
+                </otherwise>
+            </choose>
+        </selectKey>
+    </insert>
+</mapper>
