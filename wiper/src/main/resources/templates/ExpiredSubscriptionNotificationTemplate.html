@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Feedback</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 15px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+Hi <span th:text="${customerName}">there!</span>,
+<p>
+    We are sorry to see your expired subscriptions:
+</p>
+<p>
+    <table>
+        <tr>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Type</th>
+            <th>Subscription ID</th>
+            <th>Expired on</th>
+        </tr>
+        <tr th:each="sd: ${serviceDetails}">
+            <td th:text="${vehicleMap.get(sd.vehicleId)}" />
+            <td th:text="${sd.service.name}" />
+            <td th:text="${sd.service.subscriptionType.name}" />
+            <td th:text="${sd.serviceDetailId}" />
+            <td th:text="${sd.subscriptionEndDate}" />
+        </tr>
+    </table>
+</p>
+<p>
+    Please visit the expired services section to renew these subscriptions.
+    Please ignore this email if you have already renewed your subscriptions.
+    For any other queries and feedback, please write to
+    <a th:href="${replyMail}">us</a>.
+</p>
+
+Thanks,<br/>
+Team wiper
+</body>
+</html>

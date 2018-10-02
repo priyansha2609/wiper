@@ -30,6 +30,9 @@
     <select id="getServiceDetailsForOrderId" resultMap="serviceDetails">
         select * from service_details where order_id = #{order.orderId}
     </select>
+    <select id="getAllActiveSubscriptions" resultMap="serviceDetails">
+        select * from service_details where is_active = 1;
+    </select>
 
     <insert id="upsertServiceDetails" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="serviceDetailId" >
         INSERT INTO service_details

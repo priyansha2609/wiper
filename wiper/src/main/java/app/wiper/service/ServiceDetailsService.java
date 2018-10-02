@@ -13,4 +13,5 @@ public interface ServiceDetailsService
     List<ServiceDetails> getServiceDetailsForOrderId(Integer orderId);
     Integer insertServiceDetails(ServiceDetails serviceDetails);
     Integer updateServiceDetails(ServiceDetails serviceDetails);
+    List<ServiceDetails> getAllActiveSubscriptions();
 }

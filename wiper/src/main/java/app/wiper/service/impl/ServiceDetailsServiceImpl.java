@@ -53,4 +53,10 @@ public class ServiceDetailsServiceImpl implements ServiceDetailsService
     {
         return upsertServiceDetails(serviceDetails);
     }
+
+    @Override
+    public List<ServiceDetails> getAllActiveSubscriptions()
+    {
+        return serviceDetailsMapper.getAllActiveSubscriptions();
+    }
 }

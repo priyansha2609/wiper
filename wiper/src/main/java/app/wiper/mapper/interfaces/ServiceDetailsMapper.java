@@ -10,4 +10,5 @@ public interface ServiceDetailsMapper {
     ServiceDetails getServiceDetailsById(Integer serviceDetailsId);
     List<ServiceDetails> getServiceDetailsForOrderId(Integer orderId);
     Integer upsertServiceDetails(Map<String, Object> params);
+    List<ServiceDetails> getAllActiveSubscriptions();
 }
